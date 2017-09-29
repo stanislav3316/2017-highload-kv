@@ -166,9 +166,6 @@ public class SingleNodeTest extends TestBase {
         final HttpResponse response = get(key);
         assertEquals(200, response.getStatusLine().getStatusCode());
 
-        System.out.println(Arrays.toString(value2));
-        System.out.println(Arrays.toString(payloadOf(response)));
-
         assertArrayEquals(value2, payloadOf(response));
     }
 

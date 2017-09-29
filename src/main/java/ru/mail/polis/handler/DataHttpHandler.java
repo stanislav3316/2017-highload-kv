@@ -5,8 +5,6 @@ import com.sun.net.httpserver.HttpHandler;
 import sun.misc.IOUtils;
 
 import java.io.*;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 
 import static java.net.HttpURLConnection.*;
 
@@ -38,6 +36,7 @@ public class DataHttpHandler implements HttpHandler {
                 break;
             case "DELETE":
                 handleDELETEMethod(httpExchange);
+                break;
         }
 
         httpExchange.close();
@@ -69,14 +68,17 @@ public class DataHttpHandler implements HttpHandler {
 
     private void handleDELETEMethod(HttpExchange httpExchange) throws IOException {
         String key = httpExchange.getRequestURI().getQuery().split("id=")[1];
-        File file = new File(path + File.pathSeparator + key);
-        file.delete();
+
+        File file = new File(path + File.separator + key);
+        if (file.exists()) {
+            ru.mail.polis.Files.deleteFileByName(path.toString(), key);
+        }
+
         httpExchange.sendResponseHeaders(HTTP_ACCEPTED, 0);
     }
 
     private byte[] getDataFromStorage(String key) {
         File storage = new File(path + File.separator + key);
-
         if (!storage.exists()) {
             return null;
         }
@@ -90,20 +92,15 @@ public class DataHttpHandler implements HttpHandler {
         return null;
     }
 
-    private void createOrUpdateFiles(String key, byte[] data) throws UnsupportedEncodingException {
+    private void createOrUpdateFiles(String key, byte[] data) throws IOException {
         File storage = new File(path + File.separator + key);
 
         if(storage.exists()) {
-            storage.delete();
+            ru.mail.polis.Files.deleteFileByName(path.toString(), key);
         }
 
-
         try {
-            java.nio.file.Files.write(
-                    Paths.get(storage.toURI()),
-                    data,
-                    StandardOpenOption.CREATE,
-                    StandardOpenOption.TRUNCATE_EXISTING);
+            ru.mail.polis.Files.createFileAndWriteValue(path.toString(), key, data);
         } catch (IOException e) {
             e.printStackTrace();
         }
