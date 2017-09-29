@@ -2,6 +2,7 @@ package ru.mail.polis.handler;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
+import sun.misc.IOUtils;
 
 import java.io.*;
 import java.nio.file.Paths;
@@ -44,29 +45,25 @@ public class DataHttpHandler implements HttpHandler {
 
     private void handleGETMethod(HttpExchange httpExchange) throws IOException {
         String key = httpExchange.getRequestURI().getQuery().split("id=")[1];
-        String data = getDataFromStorage(key);
+        byte[] data = getDataFromStorage(key);
 
         if (data == null) {
             httpExchange.sendResponseHeaders(HTTP_NOT_FOUND, 0);
         } else {
             httpExchange.sendResponseHeaders(HTTP_OK, 0);
-            httpExchange.getResponseBody().write(data.getBytes());
+            httpExchange.getResponseBody().write(data);
         }
     }
 
     private void handlePUTMethod(HttpExchange httpExchange) throws IOException {
         String key = httpExchange.getRequestURI().getQuery().split("id=")[1];
-        StringBuilder data = new StringBuilder();
-        BufferedReader br = new BufferedReader(
-                new InputStreamReader(httpExchange.getRequestBody(), "UTF-8"));
+        InputStream is = httpExchange.getRequestBody();
+        byte[] bytes = new byte[is.available()];
 
-        String line = null;
-        while((line = br.readLine()) != null) {
-            data.append(line);
-        }
+        is.read(bytes, 0, bytes.length);
+        is.close();
 
-        System.out.println(new String(data.toString().getBytes(), "utf-8"));
-        createOrUpdateFiles(key, data.toString());
+        createOrUpdateFiles(key, bytes);
         httpExchange.sendResponseHeaders(HTTP_CREATED, 0);
     }
 
@@ -77,23 +74,15 @@ public class DataHttpHandler implements HttpHandler {
         httpExchange.sendResponseHeaders(HTTP_ACCEPTED, 0);
     }
 
-    private String getDataFromStorage(String key) {
+    private byte[] getDataFromStorage(String key) {
         File storage = new File(path + File.separator + key);
 
         if (!storage.exists()) {
             return null;
         }
 
-        try (BufferedReader bf = new BufferedReader(new FileReader(storage))) {
-            StringBuilder res = new StringBuilder();
-            String line = null;
-
-            while((line = bf.readLine()) != null) {
-                res.append(line);
-            }
-
-            return res.toString();
-
+        try {
+            return IOUtils.readFully(new FileInputStream(storage), -1, true);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -101,7 +90,7 @@ public class DataHttpHandler implements HttpHandler {
         return null;
     }
 
-    private void createOrUpdateFiles(String key, String data) throws UnsupportedEncodingException {
+    private void createOrUpdateFiles(String key, byte[] data) throws UnsupportedEncodingException {
         File storage = new File(path + File.separator + key);
 
         if(storage.exists()) {
@@ -112,7 +101,7 @@ public class DataHttpHandler implements HttpHandler {
         try {
             java.nio.file.Files.write(
                     Paths.get(storage.toURI()),
-                    data.getBytes("UTF-8"),
+                    data,
                     StandardOpenOption.CREATE,
                     StandardOpenOption.TRUNCATE_EXISTING);
         } catch (IOException e) {
