@@ -1,5 +1,7 @@
 package ru.mail.polis;
 
+import java.io.IOException;
+
 /**
  * A persistent storage with HTTP API.
  * <p>
@@ -27,7 +29,7 @@ public interface KVService {
      * <p>
      * May be called only once.
      */
-    void start();
+    void start() throws IOException;
 
     /**
      * Stop listening and free all the resources.

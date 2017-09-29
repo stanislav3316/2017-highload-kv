@@ -54,7 +54,8 @@ public class StartStopTest extends TestBase {
         try {
             // Should not respond before start
             status();
-        } catch (SocketTimeoutException e) {
+        // } catch (SocketTimeoutException e) {
+        } catch (HttpHostConnectException e) {
             // Do nothing
         }
     }

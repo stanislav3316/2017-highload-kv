@@ -11,6 +11,7 @@ import org.junit.rules.Timeout;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
@@ -164,6 +165,10 @@ public class SingleNodeTest extends TestBase {
         // Check value 2
         final HttpResponse response = get(key);
         assertEquals(200, response.getStatusLine().getStatusCode());
+
+        System.out.println(Arrays.toString(value2));
+        System.out.println(Arrays.toString(payloadOf(response)));
+
         assertArrayEquals(value2, payloadOf(response));
     }
 
