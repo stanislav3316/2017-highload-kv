@@ -5,7 +5,7 @@
 !.gitignore
 !*.java
 !.travis.yml
-!build.gradle
+!build.gradle.kts
 !gradlew
 !settings.gradle
 
