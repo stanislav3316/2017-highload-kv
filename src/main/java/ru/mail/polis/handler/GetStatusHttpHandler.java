@@ -6,7 +6,6 @@ import com.sun.net.httpserver.HttpHandler;
 import java.io.IOException;
 
 import static java.net.HttpURLConnection.HTTP_BAD_REQUEST;
-import static java.net.HttpURLConnection.HTTP_NOT_FOUND;
 import static java.net.HttpURLConnection.HTTP_OK;
 
 /**

@@ -4,10 +4,6 @@
 # But not Java files...
 !.gitignore
 !*.java
-!.travis.yml
-!build.gradle.kts
-!gradlew
-!settings.gradle
 
 # ...even if they are in subdirectories
 !*/

@@ -1,7 +1,6 @@
 package ru.mail.polis;
 
 import org.jetbrains.annotations.NotNull;
-
 import java.io.File;
 import java.io.IOException;
 
