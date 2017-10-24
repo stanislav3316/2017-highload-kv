@@ -17,8 +17,8 @@ dependencies {
     // JUnit test framework
     testCompile("junit:junit:4.12")
 
-    // HTTP client for unit tests
-    testCompile("org.apache.httpcomponents:fluent-hc:4.5.3")
+    // HTTP client
+    compile("org.apache.httpcomponents:fluent-hc:4.5.3")
 
     // Guava for tests
     testCompile("com.google.guava:guava:23.1-jre")
