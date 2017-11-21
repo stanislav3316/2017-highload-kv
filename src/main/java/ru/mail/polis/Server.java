@@ -21,7 +21,11 @@ public final class Server {
         final File data = Files.createTempDirectory();
 
         // Start the storage
-        final KVService storage = KVServiceFactory.create(PORT, data, Collections.emptySet());
+        final KVService storage =
+                KVServiceFactory.create(
+                        PORT,
+                        data,
+                        Collections.singleton("http://localhost:" + PORT));
         storage.start();
         Runtime.getRuntime().addShutdownHook(new Thread(storage::stop));
     }

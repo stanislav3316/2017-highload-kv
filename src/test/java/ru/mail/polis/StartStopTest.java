@@ -58,8 +58,7 @@ public class StartStopTest extends TestBase {
         try {
             // Should not respond before start
             status();
-        } catch (SocketTimeoutException|HttpHostConnectException e1) {
-            // в этом месте возникает именно HttpHostConnectException
+        } catch (HttpHostConnectException e) {
             // Do nothing
         }
     }

@@ -11,17 +11,20 @@ repositories {
 }
 
 dependencies {
+    // One-nio http server
+    compile("ru.odnoklassniki:one-nio:1.0.1")
+
     // Annotations for better code documentation
     compile("com.intellij:annotations:12.0")
 
     // JUnit test framework
     testCompile("junit:junit:4.12")
 
-    // HTTP client
+    // HTTP client for unit tests
     compile("org.apache.httpcomponents:fluent-hc:4.5.3")
 
     // Guava for tests
-    testCompile("com.google.guava:guava:23.1-jre")
+    compile("com.google.guava:guava:23.1-jre")
 }
 
 tasks {
@@ -32,8 +35,8 @@ tasks {
 
 application {
     // Define the main class for the application
-    mainClassName = "ru.mail.polis.Server"
+    mainClassName = "ru.mail.polis.Cluster"
 
     // And limit Xmx
-    applicationDefaultJvmArgs = listOf("-Xmx1g")
+    applicationDefaultJvmArgs = listOf("-Xmx1g", "-Xverify:none")
 }

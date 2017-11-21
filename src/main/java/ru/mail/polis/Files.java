@@ -3,7 +3,6 @@ package ru.mail.polis;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Path;
@@ -15,7 +14,7 @@ import java.nio.file.attribute.BasicFileAttributes;
  *
  * @author Vadim Tsesko <mail@incubos.org>
  */
-public final class Files {
+final class Files {
     private static final String TEMP_PREFIX = "highload-kv";
 
     private Files() {
@@ -61,20 +60,5 @@ public final class Files {
                         return FileVisitResult.CONTINUE;
                     }
                 });
-    }
-
-    public static void createFileAndWriteValue(@NotNull final String path, @NotNull final String name,
-                                               @NotNull final byte[] value) throws IOException {
-        File file = new File(path + File.separator + name);
-
-        FileOutputStream fileOutputStream = new FileOutputStream(file.getAbsolutePath());
-        fileOutputStream.write(value);
-        fileOutputStream.flush();
-        fileOutputStream.close();
-    }
-
-    public static void deleteFileByName(@NotNull final String path, @NotNull final String name) throws IOException {
-        File file = new File(path + File.separator + name);
-        recursiveDelete(file);
     }
 }

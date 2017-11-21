@@ -1,6 +1,9 @@
 package ru.mail.polis;
 
+import one.nio.server.AcceptorConfig;
+import one.nio.server.ServerConfig;
 import org.jetbrains.annotations.NotNull;
+import ru.mail.polis.server.KvServiceImpl;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,8 +24,9 @@ final class KVServiceFactory {
     /**
      * Construct a storage instance.
      *
-     * @param port port to bind HTTP server to
-     * @param data local disk folder to persist the data to
+     * @param port     port to bind HTTP server to
+     * @param data     local disk folder to persist the data to
+     * @param topology a list of all cluster endpoints {@code http://<host>:<port>} (including this one)
      * @return a storage instance
      */
     @NotNull
@@ -46,6 +50,21 @@ final class KVServiceFactory {
             throw new IllegalArgumentException("Path is not a directory: " + data);
         }
 
-        return new KVServiceImplementation(port, data, topology);
+        ServerConfig config = getBasicConfig(port);
+
+        return new KvServiceImpl(config, data, topology);
+    }
+
+    private static ServerConfig getBasicConfig(int port) {
+        ServerConfig config = new ServerConfig();
+
+        config.selectors = Runtime.getRuntime().availableProcessors();
+
+        AcceptorConfig ac = new AcceptorConfig();
+        ac.port = port;
+        ac.address = "localhost";
+        config.acceptors = new AcceptorConfig[] {ac};
+
+        return config;
     }
 }

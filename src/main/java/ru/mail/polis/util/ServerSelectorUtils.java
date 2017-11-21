@@ -1,20 +1,26 @@
 package ru.mail.polis.util;
 
 import org.jetbrains.annotations.NotNull;
+
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
 /**
- * Created by iters on 10/23/17.
+ * Created by iters on 11/17/17.
  */
 public class ServerSelectorUtils {
 
     public static Set<String> getServers(@NotNull Set<String> topology,
-                                         @NotNull final long hash,
-                                         @NotNull final int from) {
+                                         final long hash,
+                                         final int from) {
         Set<String> servers = new HashSet<>();
+
+        if (topology.size() == 1) {
+            return topology;
+        }
+
         List<String> tempTopology = new LinkedList<>(topology);
         long index = hash - 1;
 
