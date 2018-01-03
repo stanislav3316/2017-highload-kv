@@ -10,4 +10,5 @@ public interface BasicStorage {
     boolean removeData(String id);
     byte[] getData(String key);
     boolean isDataExist(String key);
+    boolean isDeleted(String key);
 }

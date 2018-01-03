@@ -11,8 +11,8 @@ public class StringHashingUtils {
     // size variable - size of topology collection
     public static long getSimpleHash(int topologySize,
                                      @NotNull String id) {
-        long sum = 0;
-        long index = 0;
+        long sum = 17;
+        int index = 0;
 
         for (char symbol : id.toCharArray()) {
             sum += ((int) symbol) * Math.pow(BASE, index++);

@@ -3,6 +3,7 @@ package ru.mail.polis.handler;
 import one.nio.http.*;
 import ru.mail.polis.httpClient.BasicHttpClient;
 import ru.mail.polis.httpClient.OneNioHttpClient;
+import ru.mail.polis.message.RequestParameters;
 import ru.mail.polis.storageManager.BasicStorage;
 import ru.mail.polis.util.ServerSelectorUtils;
 import ru.mail.polis.util.StringHashingUtils;
@@ -16,9 +17,7 @@ public class FrontHandler {
     private Set<String> topology;
     private BasicHttpClient client;
     private final int port;
-
     private BasicStorage storage;
-    private Set<String> deletedKeys;
 
     private final int OK_CODE = 200;
     private final int DELETED_CODE = 204;
@@ -26,11 +25,10 @@ public class FrontHandler {
     private final int ACCEPTED_CODE = 202;
     private final int NOT_FOUND_CODE = 404;
 
-    public FrontHandler(Set<String> topology, int port, BasicStorage storage, Set<String> deletedKeys) {
+    public FrontHandler(Set<String> topology, int port, BasicStorage storage) {
         this.topology = topology;
         this.port = port;
         this.storage = storage;
-        this.deletedKeys = deletedKeys;
         client = new OneNioHttpClient();
     }
 
@@ -50,27 +48,24 @@ public class FrontHandler {
             return;
         }
 
-        replicas = (replicas == null || replicas.length() == 0) ?
-                (topology.size() / 2 + 1) + "/" + topology.size() :
-                replicas;
 
-        int ack = Integer.parseInt(replicas.split("/")[0]);
-        int from = Integer.parseInt(replicas.split("/")[1]);
+        RequestParameters reqPar =
+                RequestParameters.getRequetInfoInstance(replicas, topology.size());
 
-        if (ack == 0 || from == 0 || ack > from) {
+        if (reqPar == null) {
             session.sendError(Response.BAD_REQUEST, "Bad params");
             return;
         }
 
         switch (request.getMethod()) {
             case Request.METHOD_GET:
-                getController(session, id, ack, from);
+                getController(session, id, reqPar.getAck(), reqPar.getFrom());
                 break;
             case Request.METHOD_PUT:
-                putController(request, session, id, ack, from);
+                putController(request, session, id, reqPar.getAck(), reqPar.getFrom());
                 break;
             case Request.METHOD_DELETE:
-                deleteController(session, id, ack, from);
+                deleteController(session, id, reqPar.getAck(), reqPar.getFrom());
                 break;
             default:
                 session.sendError(Response.BAD_REQUEST, "Not available HTTP Method");
@@ -86,13 +81,13 @@ public class FrontHandler {
 
         int received = 0;
         int notFound = 0;
+        //TODO: не качать данные из всех источников
         byte[] data = null;
 
         for (String server : dataTopology) {
-
             if (server.endsWith(port + "")) {
-                if (deletedKeys.contains(id)) {
-                    session.sendResponse(new Response(Response.NOT_FOUND, "file does't found".getBytes()));
+                if (storage.isDeleted(id)) {
+                    session.sendResponse(new Response(Response.NOT_FOUND, "file dot found".getBytes()));
                     return;
                 }
 
@@ -125,7 +120,9 @@ public class FrontHandler {
             }
         }
 
-        if (notFound + received < ack) {
+        if (received >= ack) {
+            session.sendResponse(new Response(Response.OK, data));
+        } else if (notFound + received < ack) {
             session.sendResponse(new Response(Response.GATEWAY_TIMEOUT, "not enought repicas".getBytes()));
         } else if (received == 0) {
             session.sendResponse(new Response(Response.NOT_FOUND, "file not found".getBytes()));
@@ -148,10 +145,6 @@ public class FrontHandler {
             if (server.contains(port + "")) {
                 byte[] body = request.getBody();
                 boolean isPutted = storage.saveData(id, body);
-
-                if (deletedKeys.contains(id)) {
-                    deletedKeys.remove(id);
-                }
 
                 received++;
                 continue;
@@ -189,8 +182,6 @@ public class FrontHandler {
         for (String server : dataTopology) {
             if (server.endsWith(port + "")) {
                 storage.removeData(id);
-                deletedKeys.add(id);
-
                 received++;
                 continue;
             }

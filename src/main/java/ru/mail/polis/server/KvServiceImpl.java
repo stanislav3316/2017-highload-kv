@@ -5,6 +5,7 @@ import one.nio.server.ServerConfig;
 import ru.mail.polis.KVService;
 import ru.mail.polis.handler.FrontHandler;
 import ru.mail.polis.handler.BackHandler;
+import ru.mail.polis.storageManager.BasicStorage;
 import ru.mail.polis.storageManager.FileBasicStorageImpl;
 
 import java.io.File;
@@ -22,18 +23,22 @@ public class KvServiceImpl
                          File dir,
                          Set<String> topology) throws IOException {
         super(config);
-
-        Set<String> deletedKeys = new HashSet<>();
-        addRequestHandlers(new BackHandler(
-                new FileBasicStorageImpl(dir), deletedKeys));
-        addRequestHandlers(new FrontHandler(
-                topology, this.port, new FileBasicStorageImpl(dir), deletedKeys));
-
+        BasicStorage storage = new FileBasicStorageImpl(dir);
+        addRequestHandlers(new BackHandler(storage));
+        addRequestHandlers(new FrontHandler(topology, this.port, storage));
     }
 
     @Override
     public void start() {
         super.start();
+
+        // это сделано потому, что сервер не успевал подняться
+        // до того как к нему начинают приходить запросы
+        try {
+            Thread.sleep(25);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

@@ -11,13 +11,10 @@ import java.util.Set;
  * Created by iters on 11/16/17.
  */
 public class BackHandler {
-
     private BasicStorage storage;
-    private Set<String> deletedKeys;
 
-    public BackHandler(BasicStorage storage, Set<String> deletedKeys) {
+    public BackHandler(BasicStorage storage) {
         this.storage = storage;
-        this.deletedKeys = deletedKeys;
     }
 
     @Path("/v0/inner")
@@ -42,7 +39,7 @@ public class BackHandler {
     }
 
     private void getController(HttpSession session, String id) throws IOException {
-        if (deletedKeys.contains(id)) {
+        if (storage.isDeleted(id)) {
             session.sendResponse(new Response(Response.NO_CONTENT, "file was deleted".getBytes()));
             return;
         }
@@ -62,12 +59,8 @@ public class BackHandler {
         boolean isPutted = storage.saveData(id, body);
 
         if (!isPutted) {
-            // http error code
-            throw new RuntimeException("error saving data");
-        }
-
-        if (deletedKeys.contains(id)) {
-            deletedKeys.remove(id);
+            //todo: http error code
+            // throw new RuntimeException("error saving data");
         }
 
         session.sendResponse(new Response(Response.CREATED, "file was created".getBytes()));
@@ -75,8 +68,6 @@ public class BackHandler {
 
     private void deleteController(HttpSession session, String id) throws IOException {
         storage.removeData(id);
-        deletedKeys.add(id);
-
         session.sendResponse(new Response(Response.ACCEPTED, "file was deleted".getBytes()));
     }
 }

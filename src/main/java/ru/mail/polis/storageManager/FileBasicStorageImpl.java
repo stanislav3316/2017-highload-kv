@@ -5,20 +5,26 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by iters on 11/16/17.
  */
 public class FileBasicStorageImpl implements BasicStorage {
 
+    private final Set<String> deletedKeys;
     private File workingDir;
 
     public FileBasicStorageImpl(File workingDir) {
         this.workingDir = workingDir;
+        deletedKeys = new HashSet<>();
     }
 
     @Override
     public boolean saveData(String id, byte[] data) {
+        deletedKeys.remove(id);
+
         File file = new File(workingDir + File.separator + id);
 
         if (file.exists()) {
@@ -44,6 +50,7 @@ public class FileBasicStorageImpl implements BasicStorage {
 
     @Override
     public boolean removeData(String id) {
+        deletedKeys.add(id);
         File file = new File(workingDir + File.separator + id);
         return file.delete();
     }
@@ -70,5 +77,10 @@ public class FileBasicStorageImpl implements BasicStorage {
     public boolean isDataExist(String key) {
         File file = new File(workingDir + File.separator + key);
         return file.exists();
+    }
+
+    @Override
+    public boolean isDeleted(String key) {
+        return deletedKeys.contains(key);
     }
 }
