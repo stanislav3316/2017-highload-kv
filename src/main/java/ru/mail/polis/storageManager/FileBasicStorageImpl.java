@@ -19,6 +19,7 @@ public class FileBasicStorageImpl implements BasicStorage {
     public FileBasicStorageImpl(File workingDir) {
         this.workingDir = workingDir;
         deletedKeys = new HashSet<>();
+        //TODO: concurrent operation with data ?
     }
 
     @Override

@@ -7,6 +7,7 @@ import one.nio.net.ConnectionString;
 import one.nio.pool.PoolException;
 
 import java.io.IOException;
+import java.net.ConnectException;
 
 /**
  * Created by iters on 11/20/17.
@@ -31,5 +32,19 @@ public class OneNioHttpClient implements BasicHttpClient<Response, Response, Res
     public Response sendDelete(String server, String id) throws IOException, InterruptedException, HttpException, PoolException {
         HttpClient client = new HttpClient(new ConnectionString(server));
         return client.delete(URL_PATH + id);
+    }
+
+    public static void main(String[] args) {
+        try {
+            new OneNioHttpClient().sendGet("http://127.0.0.1:8076", "123");
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (HttpException e) {
+            e.printStackTrace();
+        } catch (PoolException e) {
+            e.printStackTrace();
+        }
     }
 }

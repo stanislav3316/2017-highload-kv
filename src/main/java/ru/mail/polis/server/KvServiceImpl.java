@@ -35,7 +35,7 @@ public class KvServiceImpl
         // это сделано потому, что сервер не успевал подняться
         // до того как к нему начинают приходить запросы
         try {
-            Thread.sleep(25);
+            Thread.sleep(50);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

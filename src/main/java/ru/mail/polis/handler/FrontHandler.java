@@ -4,11 +4,13 @@ import one.nio.http.*;
 import ru.mail.polis.httpClient.BasicHttpClient;
 import ru.mail.polis.httpClient.OneNioHttpClient;
 import ru.mail.polis.message.RequestParameters;
+import ru.mail.polis.message.ResponseMessage;
 import ru.mail.polis.storageManager.BasicStorage;
 import ru.mail.polis.util.ServerSelectorUtils;
 import ru.mail.polis.util.StringHashingUtils;
 import java.io.IOException;
 import java.util.Set;
+import java.util.concurrent.*;
 
 /**
  * Created by iters on 11/17/17.
@@ -17,7 +19,8 @@ public class FrontHandler {
     private Set<String> topology;
     private BasicHttpClient client;
     private final int port;
-    private BasicStorage storage;
+    private final BasicStorage storage;
+    private final CompletionService<ResponseMessage> ecs;
 
     private final int OK_CODE = 200;
     private final int DELETED_CODE = 204;
@@ -30,6 +33,9 @@ public class FrontHandler {
         this.port = port;
         this.storage = storage;
         client = new OneNioHttpClient();
+        ecs = new ExecutorCompletionService<>(
+                Executors.newCachedThreadPool()
+        );
     }
 
     @Path("/v0/status")
@@ -41,13 +47,12 @@ public class FrontHandler {
     public void handler(Request request,
                         HttpSession session,
                         @Param(value = "id") String id,
-                        @Param(value = "replicas") String replicas) throws IOException {
+                        @Param(value = "replicas") String replicas) throws IOException, ExecutionException, InterruptedException {
 
         if (id == null || id.length() == 0) {
             session.sendError(Response.BAD_REQUEST, "bad request");
             return;
         }
-
 
         RequestParameters reqPar =
                 RequestParameters.getRequetInfoInstance(replicas, topology.size());
@@ -75,19 +80,17 @@ public class FrontHandler {
     private void getController(HttpSession session,
                                String id,
                                int ack,
-                               int from) throws IOException {
-        long hashId = StringHashingUtils.getSimpleHash(topology.size(), id);
-        Set<String> dataTopology = ServerSelectorUtils.getServers(topology, hashId, from);
-
+                               int from) throws IOException, InterruptedException, ExecutionException {
         int received = 0;
         int notFound = 0;
-        //TODO: не качать данные из всех источников
+        int activeTasks = 0;
         byte[] data = null;
 
-        for (String server : dataTopology) {
+        for (String server : ServerSelectorUtils.getServers(topology, id, from)) {
             if (server.endsWith(port + "")) {
                 if (storage.isDeleted(id)) {
-                    session.sendResponse(new Response(Response.NOT_FOUND, "file dot found".getBytes()));
+                    session.sendResponse(new Response(
+                            Response.NOT_FOUND, "file dot found".getBytes()));
                     return;
                 }
 
@@ -101,31 +104,56 @@ public class FrontHandler {
                 continue;
             }
 
-            Response resp = null;
+            ecs.submit(() -> {
+                try {
+                    Response resp = (Response) client.sendGet(server, id);
+                    ResponseMessage resMes;
 
-            try {
-                resp = (Response) client.sendGet(server, id);
-            } catch (Exception e) {
+                    if (resp.getStatus() == OK_CODE) {
+                        resMes = new ResponseMessage(resp.getStatus(), resp.getBody());
+                    } else {
+                        resMes = new ResponseMessage(resp.getStatus());
+                    }
+
+                    return resMes;
+                } catch (Exception e) {
+                    return null;
+                }
+            });
+
+            activeTasks++;
+        }
+
+        for (int i = 0; i < activeTasks; i++) {
+            ResponseMessage rm =  ecs.take().get();
+
+            if (rm == null) {
                 continue;
             }
 
-            if (resp.getStatus() == OK_CODE) {
-                received++;
-                data = resp.getBody();
-            } else if (resp.getStatus() == DELETED_CODE) {
-                session.sendResponse(new Response(Response.NOT_FOUND, "file not found".getBytes()));
-                return;
-            } else if (resp.getStatus() == NOT_FOUND_CODE) {
-                notFound++;
+            switch (rm.code) {
+                case OK_CODE:
+                    received++;
+                    data = rm.getData();
+                    break;
+                case DELETED_CODE:
+                    session.sendResponse(new Response(
+                            Response.NOT_FOUND, "file not found".getBytes()));
+                    return;
+                case NOT_FOUND_CODE:
+                    notFound++;
+                    break;
             }
         }
 
         if (received >= ack) {
             session.sendResponse(new Response(Response.OK, data));
         } else if (notFound + received < ack) {
-            session.sendResponse(new Response(Response.GATEWAY_TIMEOUT, "not enought repicas".getBytes()));
+            session.sendResponse(new Response(
+                    Response.GATEWAY_TIMEOUT, "not enought replicas".getBytes()));
         } else if (received == 0) {
-            session.sendResponse(new Response(Response.NOT_FOUND, "file not found".getBytes()));
+            session.sendResponse(new Response(
+                    Response.NOT_FOUND, "file not found".getBytes()));
         } else {
             session.sendResponse(new Response(Response.OK, data));
         }
@@ -135,13 +163,11 @@ public class FrontHandler {
                                HttpSession session,
                                String id,
                                int ack,
-                               int from) throws IOException {
-        long hashId = StringHashingUtils.getSimpleHash(topology.size(), id);
-        Set<String> dataTopology = ServerSelectorUtils.getServers(topology, hashId, from);
-
+                               int from) throws IOException, InterruptedException, ExecutionException {
         int received = 0;
+        int activeTasks = 0;
 
-        for (String server : dataTopology) {
+        for (String server : ServerSelectorUtils.getServers(topology, id, from)) {
             if (server.contains(port + "")) {
                 byte[] body = request.getBody();
                 boolean isPutted = storage.saveData(id, body);
@@ -150,59 +176,83 @@ public class FrontHandler {
                 continue;
             }
 
-            Response resp = null;
+            ecs.submit(() -> {
+                try {
+                    Response resp = (Response) client.sendPut(server, id, request.getBody());
+                    return new ResponseMessage(resp.getStatus());
+                } catch (Exception e) {
+                    return null;
+                }
+            });
 
-            try {
-                resp = (Response) client.sendPut(server, id, request.getBody());
-            } catch (Exception e) {
+            activeTasks++;
+        }
+
+        for (int i = 0; i < activeTasks; i++) {
+            ResponseMessage rm =  ecs.take().get();
+
+            if (rm == null) {
                 continue;
             }
 
-            if (resp.getStatus() == CREATED_CODE) {
+            if (rm.code == CREATED_CODE) {
                 received++;
             }
         }
 
         if (received >= ack) {
-            session.sendResponse(new Response(Response.CREATED, "file was created".getBytes()));
+            session.sendResponse(new Response(
+                    Response.CREATED, "file was created".getBytes()));
         } else {
-            session.sendResponse(new Response(Response.GATEWAY_TIMEOUT, "not enought replicas".getBytes()));
+            session.sendResponse(new Response(
+                    Response.GATEWAY_TIMEOUT, "not enought replicas".getBytes()));
         }
     }
 
     private void deleteController(HttpSession session,
                                   String id,
                                   int ack,
-                                  int from) throws IOException {
-        long hashId = StringHashingUtils.getSimpleHash(topology.size(), id);
-        Set<String> dataTopology = ServerSelectorUtils.getServers(topology, hashId, from);
-
+                                  int from) throws IOException, InterruptedException, ExecutionException {
         int received = 0;
+        int activeTasks = 0;
 
-        for (String server : dataTopology) {
+        for (String server : ServerSelectorUtils.getServers(topology, id, from)) {
             if (server.endsWith(port + "")) {
                 storage.removeData(id);
                 received++;
                 continue;
             }
 
-            Response resp = null;
+            ecs.submit(() -> {
+                try {
+                    Response resp = (Response) client.sendDelete(server, id);
+                    return new ResponseMessage(resp.getStatus());
+                } catch (Exception e) {
+                    return null;
+                }
+            });
 
-            try {
-                resp = (Response) client.sendDelete(server, id);
-            } catch (Exception e) {
+            activeTasks++;
+        }
+
+        for (int i = 0; i < activeTasks; i++) {
+            ResponseMessage rm =  ecs.take().get();
+
+            if (rm == null) {
                 continue;
             }
 
-            if (resp.getStatus() == ACCEPTED_CODE) {
+            if (rm.code == ACCEPTED_CODE) {
                 received++;
             }
         }
 
         if (received >= ack) {
-            session.sendResponse(new Response(Response.ACCEPTED, "file was deleted".getBytes()));
+            session.sendResponse(new Response(
+                    Response.ACCEPTED, "file was deleted".getBytes()));
         } else {
-            session.sendResponse(new Response(Response.GATEWAY_TIMEOUT, "not enought replicas".getBytes()));
+            session.sendResponse(new Response(
+                    Response.GATEWAY_TIMEOUT, "not enought replicas".getBytes()));
         }
     }
 }
