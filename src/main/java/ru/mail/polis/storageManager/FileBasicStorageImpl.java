@@ -1,12 +1,16 @@
 package ru.mail.polis.storageManager;
 
 import com.google.common.io.ByteStreams;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.Set;
+
+import static java.nio.file.StandardOpenOption.CREATE;
+import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
 
 /**
  * Created by iters on 11/16/17.
@@ -26,27 +30,16 @@ public class FileBasicStorageImpl implements BasicStorage {
     public boolean saveData(String id, byte[] data) {
         deletedKeys.remove(id);
 
-        File file = new File(workingDir + File.separator + id);
+        Path p = Paths.get(workingDir + File.separator + id);
 
-        if (file.exists()) {
-            file.delete();
-        }
-
-        boolean isCreated;
-        try {
-            isCreated = file.createNewFile();
+        try (OutputStream out = new BufferedOutputStream(
+                Files.newOutputStream(p, CREATE, TRUNCATE_EXISTING))) {
+            out.write(data, 0, data.length);
         } catch (IOException e) {
-            isCreated = false;
+            e.printStackTrace();
         }
 
-        boolean isWritten = true;
-        try (FileOutputStream fos = new FileOutputStream(file)) {
-            fos.write(data);
-        } catch (IOException e) {
-            isWritten = false;
-        }
-
-        return isCreated && isWritten;
+        return true;
     }
 
     @Override

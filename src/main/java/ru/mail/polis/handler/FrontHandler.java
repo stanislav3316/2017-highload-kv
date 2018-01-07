@@ -134,7 +134,14 @@ public class FrontHandler {
             switch (rm.code) {
                 case OK_CODE:
                     received++;
-                    data = rm.getData();
+                    data = (data == null) ? rm.getData() : data;
+
+                    // missing write
+                    if (!storage.isDataExist(id)) {
+                        storage.saveData(id, data);
+                        received++;
+                    }
+
                     break;
                 case DELETED_CODE:
                     session.sendResponse(new Response(
@@ -154,9 +161,8 @@ public class FrontHandler {
         } else if (received == 0) {
             session.sendResponse(new Response(
                     Response.NOT_FOUND, "file not found".getBytes()));
-        } else {
-            session.sendResponse(new Response(Response.OK, data));
         }
+
     }
 
     private void putController(Request request,

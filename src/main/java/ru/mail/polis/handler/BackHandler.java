@@ -59,8 +59,9 @@ public class BackHandler {
         boolean isPutted = storage.saveData(id, body);
 
         if (!isPutted) {
-            //todo: http error code
-            // throw new RuntimeException("error saving data");
+            session.sendResponse(new Response(
+                    Response.INTERNAL_ERROR, "can't create file".getBytes()));
+            return;
         }
 
         session.sendResponse(new Response(Response.CREATED, "file was created".getBytes()));
