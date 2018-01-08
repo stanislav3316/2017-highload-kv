@@ -2,16 +2,14 @@ package ru.mail.polis.util;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by iters on 11/17/17.
  */
 public class ServerSelectorUtils {
 
+    /*
     public static Set<String> getServers(@NotNull Set<String> topology,
                                          final long hash,
                                          final int from) {
@@ -31,22 +29,22 @@ public class ServerSelectorUtils {
 
         return servers;
     }
+    */
 
-    public static Set<String> getServers(@NotNull Set<String> topology,
+    //todo: add cache ?
+    public static List<String> getServers(@NotNull List<String> topology,
                                          @NotNull String id,
                                          final int from) {
-        Set<String> servers = new HashSet<>();
-
         if (topology.size() == 1) {
             return topology;
         }
 
-        List<String> tempTopology = new LinkedList<>(topology);
-        long index = StringHashingUtils.getSimpleHash(topology.size(), id) - 1;
+        List<String> servers = new ArrayList<>();
+        int index = (Math.abs(id.hashCode()) % topology.size()) - 1;
 
         for (int i = 0; i < from; i++) {
             index = (index + 1) % topology.size();
-            servers.add(tempTopology.get((int) index));
+            servers.add(topology.get(index));
         }
 
         return servers;

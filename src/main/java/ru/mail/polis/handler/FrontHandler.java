@@ -9,6 +9,8 @@ import ru.mail.polis.storageManager.BasicStorage;
 import ru.mail.polis.util.ServerSelectorUtils;
 import ru.mail.polis.util.StringHashingUtils;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.*;
 
@@ -16,7 +18,7 @@ import java.util.concurrent.*;
  * Created by iters on 11/17/17.
  */
 public class FrontHandler {
-    private Set<String> topology;
+    private List<String> topology;
     private BasicHttpClient client;
     private final int port;
     private final BasicStorage storage;
@@ -29,10 +31,10 @@ public class FrontHandler {
     private final int NOT_FOUND_CODE = 404;
 
     public FrontHandler(Set<String> topology, int port, BasicStorage storage) {
-        this.topology = topology;
+        this.topology = new ArrayList<>(topology);
         this.port = port;
         this.storage = storage;
-        client = new OneNioHttpClient();
+        client = new OneNioHttpClient(this.topology);
         ecs = new ExecutorCompletionService<>(
                 Executors.newCachedThreadPool()
         );
@@ -201,6 +203,7 @@ public class FrontHandler {
                 continue;
             }
 
+            System.out.println(rm.code);
             if (rm.code == CREATED_CODE) {
                 received++;
             }

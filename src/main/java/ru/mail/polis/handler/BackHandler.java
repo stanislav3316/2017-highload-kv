@@ -17,28 +17,8 @@ public class BackHandler {
         this.storage = storage;
     }
 
-    @Path("/v0/inner")
-    public void handler(Request request,
-                         HttpSession session,
-                         @Param(value = "id") String id) throws IOException {
-
-        switch (request.getMethod()) {
-            case Request.METHOD_GET:
-                getController(session, id);
-                break;
-            case Request.METHOD_PUT:
-                putController(request, session, id);
-                break;
-            case Request.METHOD_DELETE:
-                deleteController(session, id);
-                break;
-            default:
-                session.sendError(Response.BAD_REQUEST,
-                        "use GET, PUT or DELETE methods");
-        }
-    }
-
-    private void getController(HttpSession session, String id) throws IOException {
+    @Path("/v0/get")
+    public void getController(HttpSession session, @Param(value = "id") String id) throws IOException {
         if (storage.isDeleted(id)) {
             session.sendResponse(new Response(Response.NO_CONTENT, "file was deleted".getBytes()));
             return;
@@ -53,8 +33,10 @@ public class BackHandler {
         session.sendResponse(new Response(Response.OK, result));
     }
 
-    private void putController(Request request, HttpSession session, String id)
+    @Path("/v0/put")
+    public void putController(Request request, HttpSession session, @Param(value = "id") String id)
             throws IOException {
+        System.out.println("hello");
         byte[] body = request.getBody();
         boolean isPutted = storage.saveData(id, body);
 
@@ -67,7 +49,8 @@ public class BackHandler {
         session.sendResponse(new Response(Response.CREATED, "file was created".getBytes()));
     }
 
-    private void deleteController(HttpSession session, String id) throws IOException {
+    @Path("/v0/delete")
+    public void deleteController(HttpSession session, @Param(value = "id") String id) throws IOException {
         storage.removeData(id);
         session.sendResponse(new Response(Response.ACCEPTED, "file was deleted".getBytes()));
     }
