@@ -21,15 +21,13 @@ public class FileBasicStorageImpl implements BasicStorage {
     private final Set<String> deletedKeys;
     private File workingDir;
     private ExecutorService exec;
-    // private CacheLRU cache;
-    private final Map<String, byte[]> cache;
+    private CacheLRU cache;
 
     public FileBasicStorageImpl(File workingDir) {
         this.workingDir = workingDir;
         deletedKeys = new HashSet<>();
         exec = Executors.newCachedThreadPool();
-        // cache = new CacheLRU();
-        cache = new HashMap<>(1000);
+        cache = new CacheLRU(50_000);
     }
 
     @Override
@@ -51,8 +49,7 @@ public class FileBasicStorageImpl implements BasicStorage {
     @Override
     public boolean removeData(String id) {
         deletedKeys.add(id);
-        File file = new File(workingDir + File.separator + id);
-        return file.delete();
+        return new File(workingDir + File.separator + id).delete();
     }
 
     @Override
@@ -63,10 +60,6 @@ public class FileBasicStorageImpl implements BasicStorage {
 
         File file = new File(workingDir + File.separator + id);
         byte[] data = null;
-
-        if (!file.exists()) {
-            return null;
-        }
 
         try (FileInputStream fis = new FileInputStream(file)) {
             data = ByteStreams.toByteArray(fis);
@@ -81,8 +74,7 @@ public class FileBasicStorageImpl implements BasicStorage {
 
     @Override
     public boolean isDataExist(String key) {
-        File file = new File(workingDir + File.separator + key);
-        return file.exists();
+        return new File(workingDir + File.separator + key).exists();
     }
 
     @Override
@@ -92,45 +84,40 @@ public class FileBasicStorageImpl implements BasicStorage {
 
 
     private static class CacheLRU {
-        private static final int INIT_CAPACITY = 3000;
-        private static final int MAX_SIZE = 1024 * 8;
+        private static final int INIT_CAPACITY = 500;
 
         private final Map<String, byte[]> map;
         private final int capacity;
 
-        public CacheLRU() {
+        CacheLRU() {
             capacity = INIT_CAPACITY;
             map = new LinkedHashMap<>(capacity, 1f, true);
         }
 
-        public CacheLRU(int capacity) {
+        CacheLRU(int capacity) {
             this.capacity = capacity;
             map = new LinkedHashMap<>(capacity, 1f, true);
         }
 
-        public synchronized void put(String id, byte[] data) {
-            if (data.length <= MAX_SIZE) {
-                return;
-            }
-
-            while (map.size() >= capacity - 1) {
+        void put(String id, byte[] data) {
+            if (map.size() >= capacity - 1) {
                 map.remove(map.keySet().iterator().next());
             }
 
             map.put(id, data);
         }
 
-        public byte[] get(String id) {
-            if (map.containsKey(id)) {
-                return map.get(id);
-            }
-
-            return null;
+        /**
+         * ATTENTION!
+         * Use this method only
+         * after helper {@link #containsKey(String) if element exist} method
+         */
+        byte[] get(String id) {
+            return map.get(id);
         }
 
-        public boolean constainsKey(String id) {
+        boolean containsKey(String id) {
             return map.containsKey(id);
         }
-
     }
 }
