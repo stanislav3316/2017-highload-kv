@@ -7,7 +7,7 @@ import ru.mail.polis.message.RequestParameters;
 import ru.mail.polis.message.ResponseMessage;
 import ru.mail.polis.storageManager.BasicStorage;
 import ru.mail.polis.util.ServerSelectorUtils;
-import ru.mail.polis.util.StringHashingUtils;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -82,140 +82,98 @@ public class FrontHandler {
     private void getController(HttpSession session,
                                String id,
                                int ack,
-                               int from) throws IOException, InterruptedException, ExecutionException {
+                               int from) throws IOException {
         int received = 0;
         int notFound = 0;
-        int activeTasks = 0;
         byte[] data = null;
 
         for (String server : ServerSelectorUtils.getServers(topology, id, from)) {
             if (server.endsWith(port + "")) {
                 if (storage.isDeleted(id)) {
-                    session.sendResponse(new Response(
-                            Response.NOT_FOUND, "file dot found".getBytes()));
+                    session.sendResponse(new Response(Response.NOT_FOUND, "file dot found".getBytes()));
                     return;
                 }
 
                 if (!storage.isDataExist(id)) {
                     notFound++;
                 } else {
-                    data = storage.getData(id);
+                    data = (data == null) ? storage.getData(id) : data;
                     received++;
                 }
 
                 continue;
             }
 
-            ecs.submit(() -> {
-                try {
-                    Response resp = (Response) client.sendGet(server, id);
-                    ResponseMessage resMes;
+            Response resp = null;
 
-                    if (resp.getStatus() == OK_CODE) {
-                        resMes = new ResponseMessage(resp.getStatus(), resp.getBody());
-                    } else {
-                        resMes = new ResponseMessage(resp.getStatus());
-                    }
-
-                    return resMes;
-                } catch (Exception e) {
-                    return null;
-                }
-            });
-
-            activeTasks++;
-        }
-
-        for (int i = 0; i < activeTasks; i++) {
-            ResponseMessage rm =  ecs.take().get();
-
-            if (rm == null) {
+            try {
+                resp = (Response) client.sendGet(server, id);
+            } catch (Exception e) {
                 continue;
             }
 
-            switch (rm.code) {
-                case OK_CODE:
+            if (resp.getStatus() == OK_CODE) {
+                received++;
+                data = (data == null) ? resp.getBody() : data;
+
+                // missing write
+                if (!storage.isDataExist(id)) {
+                    storage.saveData(id, data);
                     received++;
-                    data = (data == null) ? rm.getData() : data;
+                }
 
-                    // missing write
-                    if (!storage.isDataExist(id)) {
-                        storage.saveData(id, data);
-                        received++;
-                    }
-
-                    break;
-                case DELETED_CODE:
-                    session.sendResponse(new Response(
-                            Response.NOT_FOUND, "file not found".getBytes()));
-                    return;
-                case NOT_FOUND_CODE:
-                    notFound++;
-                    break;
+            } else if (resp.getStatus() == DELETED_CODE) {
+                session.sendResponse(new Response(Response.NOT_FOUND, "file not found".getBytes()));
+                return;
+            } else if (resp.getStatus() == NOT_FOUND_CODE) {
+                notFound++;
             }
         }
 
         if (received >= ack) {
             session.sendResponse(new Response(Response.OK, data));
         } else if (notFound + received < ack) {
-            session.sendResponse(new Response(
-                    Response.GATEWAY_TIMEOUT, "not enought replicas".getBytes()));
+            session.sendResponse(new Response(Response.GATEWAY_TIMEOUT, "not enought repicas".getBytes()));
         } else if (received == 0) {
-            session.sendResponse(new Response(
-                    Response.NOT_FOUND, "file not found".getBytes()));
+            session.sendResponse(new Response(Response.NOT_FOUND, "file not found".getBytes()));
         }
-
     }
 
     private void putController(Request request,
                                HttpSession session,
                                String id,
                                int ack,
-                               int from) throws IOException, InterruptedException, ExecutionException {
+                               int from) throws IOException {
         int received = 0;
-        int activeTasks = 0;
 
         for (String server : ServerSelectorUtils.getServers(topology, id, from)) {
             if (server.contains(port + "")) {
                 byte[] body = request.getBody();
                 storage.saveData(id, body);
-
                 received++;
                 continue;
             }
 
-            ecs.submit(() -> {
-                try {
-                    Response resp = (Response) client.sendPut(server, id, request.getBody());
-                    return new ResponseMessage(resp.getStatus());
-                } catch (Exception e) {
-                    return null;
-                }
-            });
+            Response resp = null;
 
-            activeTasks++;
-        }
-
-        for (int i = 0; i < activeTasks; i++) {
-            ResponseMessage rm =  ecs.take().get();
-
-            if (rm == null) {
+            try {
+                resp = (Response) client.sendPut(server, id, request.getBody());
+            } catch (Exception e) {
                 continue;
             }
 
-            if (rm.code == CREATED_CODE) {
+            if (resp.getStatus() == CREATED_CODE) {
                 received++;
             }
         }
 
         if (received >= ack) {
-            session.sendResponse(new Response(
-                    Response.CREATED, "file was created".getBytes()));
+            session.sendResponse(new Response(Response.CREATED, "file was created".getBytes()));
         } else {
-            session.sendResponse(new Response(
-                    Response.GATEWAY_TIMEOUT, "not enought replicas".getBytes()));
+            session.sendResponse(new Response(Response.GATEWAY_TIMEOUT, "not enought replicas".getBytes()));
         }
     }
+
 
     private void deleteController(HttpSession session,
                                   String id,
