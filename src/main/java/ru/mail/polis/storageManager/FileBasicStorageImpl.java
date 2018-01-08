@@ -8,6 +8,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import static java.nio.file.StandardOpenOption.CREATE;
 import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
@@ -19,27 +21,29 @@ public class FileBasicStorageImpl implements BasicStorage {
 
     private final Set<String> deletedKeys;
     private File workingDir;
+    private ExecutorService exec;
 
     public FileBasicStorageImpl(File workingDir) {
         this.workingDir = workingDir;
         deletedKeys = new HashSet<>();
+        exec = Executors.newCachedThreadPool();
         //TODO: concurrent operation with data ?
     }
 
     @Override
-    public boolean saveData(String id, byte[] data) {
+    public void saveData(String id, byte[] data) {
         deletedKeys.remove(id);
 
-        Path p = Paths.get(workingDir + File.separator + id);
+        exec.submit(() -> {
+            Path p = Paths.get(workingDir + File.separator + id);
 
-        try (OutputStream out = new BufferedOutputStream(
-                Files.newOutputStream(p, CREATE, TRUNCATE_EXISTING))) {
-            out.write(data, 0, data.length);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return true;
+            try (OutputStream out = new BufferedOutputStream(
+                    Files.newOutputStream(p, CREATE, TRUNCATE_EXISTING))) {
+                out.write(data, 0, data.length);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     @Override

@@ -36,17 +36,11 @@ public class BackHandler {
     @Path("/v0/put")
     public void putController(Request request, HttpSession session, @Param(value = "id") String id)
             throws IOException {
-        System.out.println("hello");
         byte[] body = request.getBody();
-        boolean isPutted = storage.saveData(id, body);
+        storage.saveData(id, body);
 
-        if (!isPutted) {
-            session.sendResponse(new Response(
-                    Response.INTERNAL_ERROR, "can't create file".getBytes()));
-            return;
-        }
-
-        session.sendResponse(new Response(Response.CREATED, "file was created".getBytes()));
+        session.sendResponse(new Response(
+                Response.CREATED, "file was attempted to created".getBytes()));
     }
 
     @Path("/v0/delete")

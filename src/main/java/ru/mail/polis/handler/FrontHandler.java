@@ -178,7 +178,7 @@ public class FrontHandler {
         for (String server : ServerSelectorUtils.getServers(topology, id, from)) {
             if (server.contains(port + "")) {
                 byte[] body = request.getBody();
-                boolean isPutted = storage.saveData(id, body);
+                storage.saveData(id, body);
 
                 received++;
                 continue;
@@ -203,7 +203,6 @@ public class FrontHandler {
                 continue;
             }
 
-            System.out.println(rm.code);
             if (rm.code == CREATED_CODE) {
                 received++;
             }
