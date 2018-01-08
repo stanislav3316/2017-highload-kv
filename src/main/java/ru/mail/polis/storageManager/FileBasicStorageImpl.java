@@ -18,15 +18,18 @@ import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
  */
 public class FileBasicStorageImpl implements BasicStorage {
 
+    private static ExecutorService exec;
     private final Set<String> deletedKeys;
     private File workingDir;
-    private ExecutorService exec;
     private CacheLRU cache;
+
+    static {
+        exec = Executors.newCachedThreadPool();
+    }
 
     public FileBasicStorageImpl(File workingDir) {
         this.workingDir = workingDir;
         deletedKeys = new HashSet<>();
-        exec = Executors.newCachedThreadPool();
         cache = new CacheLRU(50_000);
     }
 
@@ -40,6 +43,10 @@ public class FileBasicStorageImpl implements BasicStorage {
             try (OutputStream out = new BufferedOutputStream(
                     Files.newOutputStream(p, CREATE, TRUNCATE_EXISTING))) {
                 out.write(data, 0, data.length);
+
+                if (cache.containsKey(id)) {
+                    cache.put(id, data);
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -49,6 +56,7 @@ public class FileBasicStorageImpl implements BasicStorage {
     @Override
     public boolean removeData(String id) {
         deletedKeys.add(id);
+        cache.remove(id);
         return new File(workingDir + File.separator + id).delete();
     }
 
@@ -61,7 +69,8 @@ public class FileBasicStorageImpl implements BasicStorage {
         File file = new File(workingDir + File.separator + id);
         byte[] data = null;
 
-        try (FileInputStream fis = new FileInputStream(file)) {
+        try (BufferedInputStream fis = new BufferedInputStream(
+                new FileInputStream(file))) {
             data = ByteStreams.toByteArray(fis);
         } catch (IOException e) {
             e.printStackTrace();
@@ -114,6 +123,10 @@ public class FileBasicStorageImpl implements BasicStorage {
          */
         byte[] get(String id) {
             return map.get(id);
+        }
+
+        void remove(String key) {
+            map.remove(key);
         }
 
         boolean containsKey(String id) {
