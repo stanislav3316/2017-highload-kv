@@ -6,8 +6,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -22,12 +21,15 @@ public class FileBasicStorageImpl implements BasicStorage {
     private final Set<String> deletedKeys;
     private File workingDir;
     private ExecutorService exec;
+    // private CacheLRU cache;
+    private final Map<String, byte[]> cache;
 
     public FileBasicStorageImpl(File workingDir) {
         this.workingDir = workingDir;
         deletedKeys = new HashSet<>();
         exec = Executors.newCachedThreadPool();
-        //TODO: concurrent operation with data ?
+        // cache = new CacheLRU();
+        cache = new HashMap<>(1000);
     }
 
     @Override
@@ -55,6 +57,10 @@ public class FileBasicStorageImpl implements BasicStorage {
 
     @Override
     public byte[] getData(String id) {
+        if (cache.containsKey(id)) {
+            return cache.get(id);
+        }
+
         File file = new File(workingDir + File.separator + id);
         byte[] data = null;
 
@@ -68,6 +74,8 @@ public class FileBasicStorageImpl implements BasicStorage {
             e.printStackTrace();
         }
 
+        cache.put(id, data);
+
         return data;
     }
 
@@ -80,5 +88,49 @@ public class FileBasicStorageImpl implements BasicStorage {
     @Override
     public boolean isDeleted(String key) {
         return deletedKeys.contains(key);
+    }
+
+
+    private static class CacheLRU {
+        private static final int INIT_CAPACITY = 3000;
+        private static final int MAX_SIZE = 1024 * 8;
+
+        private final Map<String, byte[]> map;
+        private final int capacity;
+
+        public CacheLRU() {
+            capacity = INIT_CAPACITY;
+            map = new LinkedHashMap<>(capacity, 1f, true);
+        }
+
+        public CacheLRU(int capacity) {
+            this.capacity = capacity;
+            map = new LinkedHashMap<>(capacity, 1f, true);
+        }
+
+        public synchronized void put(String id, byte[] data) {
+            if (data.length <= MAX_SIZE) {
+                return;
+            }
+
+            while (map.size() >= capacity - 1) {
+                map.remove(map.keySet().iterator().next());
+            }
+
+            map.put(id, data);
+        }
+
+        public byte[] get(String id) {
+            if (map.containsKey(id)) {
+                return map.get(id);
+            }
+
+            return null;
+        }
+
+        public boolean constainsKey(String id) {
+            return map.containsKey(id);
+        }
+
     }
 }

@@ -1,34 +1,39 @@
 package ru.mail.polis.message;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Created by iters on 1/3/18.
  */
 public class RequestParameters {
-    private final String replicas;
     private int ack;
     private int from;
+    private static Map<String, RequestParameters> map = new HashMap<>();
 
     private RequestParameters(String replicas, int topologySize) {
-        this.replicas = (replicas == null || replicas.length() == 0)
+        replicas = (replicas == null || replicas.length() == 0)
                 ? (topologySize / 2 + 1) + "/" + topologySize : replicas;
-        computeParameters();
+
+        String[] parts = replicas.split("/");
+        ack = Integer.parseInt(parts[0]);
+        from = Integer.parseInt(parts[1]);
     }
 
     public static RequestParameters getRequetInfoInstance(String replicas,
                                                           int topologySize) {
-        //todo: caching
+        if (map.containsKey(replicas)) {
+            return map.get(replicas);
+        }
+
         RequestParameters req = new RequestParameters(replicas, topologySize);
 
         if (req.ack == 0 || req.from == 0 || req.ack > req.from) {
             return null;
         }
 
+        map.put(replicas, req);
         return req;
-    }
-
-    private void computeParameters() {
-        ack = Integer.parseInt(replicas.split("/")[0]);
-        from = Integer.parseInt(replicas.split("/")[1]);
     }
 
     public int getAck() {
