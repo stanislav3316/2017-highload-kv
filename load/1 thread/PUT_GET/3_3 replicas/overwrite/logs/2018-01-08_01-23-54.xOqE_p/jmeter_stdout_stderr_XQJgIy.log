@@ -1,0 +1,5 @@
+Creating summariser <summary>
+Created the tree successfully using /home/iters/high-dynamic/1 thread/PUT_GET/3_3 replicas/overwrite/modified_WpHlyx.jmx
+Starting the test @ Mon Jan 08 01:24:11 MSK 2018 (1515363851272)
+Waiting for possible shutdown message on port 4445
+summary +   3455 in    18s =  195,0/s Avg:     3 Min:     1 Max:   252 Err:   164 (4,75%) Active: 1 Started: 1 Finished: 0

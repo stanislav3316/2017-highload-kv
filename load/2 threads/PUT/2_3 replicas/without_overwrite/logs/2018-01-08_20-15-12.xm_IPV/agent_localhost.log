@@ -1,0 +1,281 @@
+2018-01-08 20:15:12,667 [INFO] agent:401 Init
+2018-01-08 20:15:12,668 [INFO] agent:409 Trying to make telegraf executable: /usr/bin/telegraf
+2018-01-08 20:15:12,668 [WARNING] agent:416 Unable to set /usr/bin/telegraf access rights to execute.
+Traceback (most recent call last):
+  File "/tmp/tmprvju8t/agent.py", line 411, in main
+    os.chmod(options.telegraf_path, 493)
+OSError: [Errno 1] Operation not permitted: '/usr/bin/telegraf'
+2018-01-08 20:15:12,669 [INFO] agent:419 Trying to make customs script executable: /tmp/tmprvju8t/agent_customs.sh
+2018-01-08 20:15:12,670 [INFO] agent:235 Successfully loaded startup config.
+Startups: []
+Shutdowns: []
+
+2018-01-08 20:15:12,670 [INFO] agent:431 Starting AgentWorker: <AgentWorker(Thread-1, initial daemon)>
+2018-01-08 20:15:12,671 [DEBUG] agent:435 Check for any stdin command for shutdown
+2018-01-08 20:15:12,671 [INFO] agent:241 Running startup commands
+2018-01-08 20:15:12,671 [INFO] agent:250 Starting metrics collector..
+2018-01-08 20:15:12,711 [INFO] agent:255 Started with pid 14682
+2018-01-08 20:15:12,711 [INFO] agent:263 Waiting for telegraf...
+2018-01-08 20:15:13,713 [INFO] agent:263 Waiting for telegraf...
+2018-01-08 20:15:14,732 [INFO] telegraf:311 STDERR: 2018-01-08T17:15:12Z I! Starting Telegraf (version 1.3.2)
+2018-01-08 20:15:14,733 [INFO] telegraf:311 STDERR: 2018-01-08T17:15:12Z I! Loaded outputs: file
+2018-01-08 20:15:14,733 [INFO] telegraf:311 STDERR: 2018-01-08T17:15:12Z I! Loaded inputs: inputs.cpu inputs.kernel inputs.system inputs.mem inputs.net inputs.diskio
+2018-01-08 20:15:14,733 [INFO] telegraf:311 STDERR: 2018-01-08T17:15:12Z I! Tags enabled: host=iters-HP-Notebook
+2018-01-08 20:15:14,733 [INFO] telegraf:311 STDERR: 2018-01-08T17:15:12Z I! Agent Config: Interval:1s, Quiet:false, Hostname:"iters-HP-Notebook", Flush Interval:1s 
+2018-01-08 20:15:15,722 [DEBUG] agent:144 Now in buffer: [1515431713, 1515431714, 1515431715]
+2018-01-08 20:15:15,734 [DEBUG] agent:291 send 1478 bytes of data to collector
+2018-01-08 20:15:16,726 [DEBUG] agent:144 Now in buffer: [1515431714, 1515431715, 1515431716]
+2018-01-08 20:15:16,735 [DEBUG] agent:291 send 1847 bytes of data to collector
+2018-01-08 20:15:17,729 [DEBUG] agent:144 Now in buffer: [1515431715, 1515431716, 1515431717]
+2018-01-08 20:15:17,737 [DEBUG] agent:291 send 1813 bytes of data to collector
+2018-01-08 20:15:19,234 [DEBUG] agent:144 Now in buffer: [1515431716, 1515431717, 1515431718]
+2018-01-08 20:15:19,737 [DEBUG] agent:144 Now in buffer: [1515431717, 1515431718, 1515431719]
+2018-01-08 20:15:19,739 [DEBUG] agent:291 send 1832 bytes of data to collector
+2018-01-08 20:15:19,740 [DEBUG] agent:291 send 1813 bytes of data to collector
+2018-01-08 20:15:21,240 [DEBUG] agent:144 Now in buffer: [1515431718, 1515431719, 1515431720]
+2018-01-08 20:15:21,742 [DEBUG] agent:291 send 1815 bytes of data to collector
+2018-01-08 20:15:21,743 [DEBUG] agent:144 Now in buffer: [1515431719, 1515431720, 1515431721]
+2018-01-08 20:15:22,744 [DEBUG] agent:291 send 1832 bytes of data to collector
+2018-01-08 20:15:22,746 [DEBUG] agent:144 Now in buffer: [1515431720, 1515431721, 1515431722]
+2018-01-08 20:15:23,747 [DEBUG] agent:291 send 1814 bytes of data to collector
+2018-01-08 20:15:24,250 [DEBUG] agent:144 Now in buffer: [1515431721, 1515431722, 1515431723]
+2018-01-08 20:15:24,748 [DEBUG] agent:291 send 1830 bytes of data to collector
+2018-01-08 20:15:25,255 [DEBUG] agent:144 Now in buffer: [1515431722, 1515431723, 1515431724, 1515431725]
+2018-01-08 20:15:25,750 [DEBUG] agent:291 send 1813 bytes of data to collector
+2018-01-08 20:15:25,751 [DEBUG] agent:291 send 1832 bytes of data to collector
+2018-01-08 20:15:26,258 [DEBUG] agent:144 Now in buffer: [1515431724, 1515431725, 1515431726]
+2018-01-08 20:15:26,752 [DEBUG] agent:291 send 1831 bytes of data to collector
+2018-01-08 20:15:28,262 [DEBUG] agent:144 Now in buffer: [1515431725, 1515431726, 1515431727]
+2018-01-08 20:15:28,754 [DEBUG] agent:291 send 1814 bytes of data to collector
+2018-01-08 20:15:29,265 [DEBUG] agent:144 Now in buffer: [1515431728, 1515431726, 1515431727]
+2018-01-08 20:15:29,756 [DEBUG] agent:291 send 1813 bytes of data to collector
+2018-01-08 20:15:29,767 [DEBUG] agent:144 Now in buffer: [1515431728, 1515431729, 1515431727]
+2018-01-08 20:15:30,757 [DEBUG] agent:291 send 1814 bytes of data to collector
+2018-01-08 20:15:30,769 [DEBUG] agent:144 Now in buffer: [1515431728, 1515431729, 1515431730]
+2018-01-08 20:15:31,759 [DEBUG] agent:291 send 1830 bytes of data to collector
+2018-01-08 20:15:32,278 [DEBUG] agent:144 Now in buffer: [1515431729, 1515431730, 1515431731]
+2018-01-08 20:15:32,761 [DEBUG] agent:291 send 1812 bytes of data to collector
+2018-01-08 20:15:32,781 [DEBUG] agent:144 Now in buffer: [1515431730, 1515431731, 1515431732]
+2018-01-08 20:15:33,762 [DEBUG] agent:291 send 1847 bytes of data to collector
+2018-01-08 20:15:34,286 [DEBUG] agent:144 Now in buffer: [1515431731, 1515431732, 1515431733, 1515431734]
+2018-01-08 20:15:34,763 [DEBUG] agent:291 send 1832 bytes of data to collector
+2018-01-08 20:15:34,764 [DEBUG] agent:291 send 1848 bytes of data to collector
+2018-01-08 20:15:35,789 [DEBUG] agent:144 Now in buffer: [1515431733, 1515431734, 1515431735]
+2018-01-08 20:15:36,766 [DEBUG] agent:291 send 1831 bytes of data to collector
+2018-01-08 20:15:36,792 [DEBUG] agent:144 Now in buffer: [1515431734, 1515431735, 1515431736]
+2018-01-08 20:15:37,767 [DEBUG] agent:291 send 1830 bytes of data to collector
+2018-01-08 20:15:38,295 [DEBUG] agent:144 Now in buffer: [1515431735, 1515431736, 1515431737]
+2018-01-08 20:15:38,769 [DEBUG] agent:291 send 1831 bytes of data to collector
+2018-01-08 20:15:38,797 [DEBUG] agent:144 Now in buffer: [1515431736, 1515431737, 1515431738]
+2018-01-08 20:15:39,770 [DEBUG] agent:291 send 1849 bytes of data to collector
+2018-01-08 20:15:40,302 [DEBUG] agent:144 Now in buffer: [1515431737, 1515431738, 1515431739, 1515431740]
+2018-01-08 20:15:40,771 [DEBUG] agent:291 send 1831 bytes of data to collector
+2018-01-08 20:15:40,771 [DEBUG] agent:291 send 1830 bytes of data to collector
+2018-01-08 20:15:41,805 [DEBUG] agent:144 Now in buffer: [1515431739, 1515431740, 1515431741]
+2018-01-08 20:15:42,773 [DEBUG] agent:291 send 1831 bytes of data to collector
+2018-01-08 20:15:43,310 [DEBUG] agent:144 Now in buffer: [1515431740, 1515431741, 1515431742, 1515431743]
+2018-01-08 20:15:43,776 [DEBUG] agent:291 send 1829 bytes of data to collector
+2018-01-08 20:15:43,776 [DEBUG] agent:291 send 1832 bytes of data to collector
+2018-01-08 20:15:44,814 [DEBUG] agent:144 Now in buffer: [1515431744, 1515431742, 1515431743]
+2018-01-08 20:15:45,778 [DEBUG] agent:291 send 1848 bytes of data to collector
+2018-01-08 20:15:46,319 [DEBUG] agent:144 Now in buffer: [1515431744, 1515431745, 1515431746, 1515431743]
+2018-01-08 20:15:46,780 [DEBUG] agent:291 send 1849 bytes of data to collector
+2018-01-08 20:15:46,780 [DEBUG] agent:291 send 1830 bytes of data to collector
+2018-01-08 20:15:47,322 [DEBUG] agent:144 Now in buffer: [1515431745, 1515431746, 1515431747]
+2018-01-08 20:15:47,781 [DEBUG] agent:291 send 1831 bytes of data to collector
+2018-01-08 20:15:48,826 [DEBUG] agent:144 Now in buffer: [1515431746, 1515431747, 1515431748]
+2018-01-08 20:15:49,783 [DEBUG] agent:291 send 1829 bytes of data to collector
+2018-01-08 20:15:50,330 [DEBUG] agent:144 Now in buffer: [1515431747, 1515431748, 1515431749]
+2018-01-08 20:15:50,784 [DEBUG] agent:291 send 1849 bytes of data to collector
+2018-01-08 20:15:51,334 [DEBUG] agent:144 Now in buffer: [1515431748, 1515431749, 1515431750, 1515431751]
+2018-01-08 20:15:51,786 [DEBUG] agent:291 send 1845 bytes of data to collector
+2018-01-08 20:15:51,786 [DEBUG] agent:291 send 1830 bytes of data to collector
+2018-01-08 20:15:53,338 [DEBUG] agent:144 Now in buffer: [1515431750, 1515431751, 1515431752]
+2018-01-08 20:15:53,788 [DEBUG] agent:291 send 1828 bytes of data to collector
+2018-01-08 20:15:54,341 [DEBUG] agent:144 Now in buffer: [1515431751, 1515431752, 1515431753, 1515431754]
+2018-01-08 20:15:54,789 [DEBUG] agent:291 send 1830 bytes of data to collector
+2018-01-08 20:15:54,790 [DEBUG] agent:291 send 1846 bytes of data to collector
+2018-01-08 20:15:55,844 [DEBUG] agent:144 Now in buffer: [1515431753, 1515431754, 1515431755]
+2018-01-08 20:15:56,792 [DEBUG] agent:291 send 1831 bytes of data to collector
+2018-01-08 20:15:57,348 [DEBUG] agent:144 Now in buffer: [1515431754, 1515431755, 1515431756]
+2018-01-08 20:15:57,794 [DEBUG] agent:291 send 1829 bytes of data to collector
+2018-01-08 20:15:58,351 [DEBUG] agent:144 Now in buffer: [1515431755, 1515431756, 1515431757]
+2018-01-08 20:15:58,795 [DEBUG] agent:291 send 1831 bytes of data to collector
+2018-01-08 20:15:58,853 [DEBUG] agent:144 Now in buffer: [1515431756, 1515431757, 1515431758]
+2018-01-08 20:15:59,796 [DEBUG] agent:291 send 1829 bytes of data to collector
+2018-01-08 20:15:59,855 [DEBUG] agent:144 Now in buffer: [1515431757, 1515431758, 1515431759]
+2018-01-08 20:16:00,798 [DEBUG] agent:291 send 1847 bytes of data to collector
+2018-01-08 20:16:01,359 [DEBUG] agent:144 Now in buffer: [1515431760, 1515431761, 1515431758, 1515431759]
+2018-01-08 20:16:01,799 [DEBUG] agent:291 send 1848 bytes of data to collector
+2018-01-08 20:16:01,799 [DEBUG] agent:291 send 1847 bytes of data to collector
+2018-01-08 20:16:02,365 [DEBUG] agent:144 Now in buffer: [1515431760, 1515431761, 1515431762]
+2018-01-08 20:16:02,800 [DEBUG] agent:291 send 1847 bytes of data to collector
+2018-01-08 20:16:03,368 [DEBUG] agent:144 Now in buffer: [1515431761, 1515431762, 1515431763]
+2018-01-08 20:16:03,803 [DEBUG] agent:291 send 1849 bytes of data to collector
+2018-01-08 20:16:04,871 [DEBUG] agent:144 Now in buffer: [1515431762, 1515431763, 1515431764]
+2018-01-08 20:16:05,806 [DEBUG] agent:291 send 1865 bytes of data to collector
+2018-01-08 20:16:06,375 [DEBUG] agent:144 Now in buffer: [1515431763, 1515431764, 1515431765, 1515431766]
+2018-01-08 20:16:06,807 [DEBUG] agent:291 send 1850 bytes of data to collector
+2018-01-08 20:16:06,807 [DEBUG] agent:291 send 1848 bytes of data to collector
+2018-01-08 20:16:07,878 [DEBUG] agent:144 Now in buffer: [1515431765, 1515431766, 1515431767]
+2018-01-08 20:16:08,810 [DEBUG] agent:291 send 1848 bytes of data to collector
+2018-01-08 20:16:09,383 [DEBUG] agent:144 Now in buffer: [1515431766, 1515431767, 1515431768, 1515431769]
+2018-01-08 20:16:09,811 [DEBUG] agent:291 send 1846 bytes of data to collector
+2018-01-08 20:16:09,812 [DEBUG] agent:291 send 1830 bytes of data to collector
+2018-01-08 20:16:10,386 [DEBUG] agent:144 Now in buffer: [1515431768, 1515431769, 1515431770]
+2018-01-08 20:16:10,813 [DEBUG] agent:291 send 1845 bytes of data to collector
+2018-01-08 20:16:11,889 [DEBUG] agent:144 Now in buffer: [1515431769, 1515431770, 1515431771]
+2018-01-08 20:16:12,814 [DEBUG] agent:291 send 1847 bytes of data to collector
+2018-01-08 20:16:13,392 [DEBUG] agent:144 Now in buffer: [1515431770, 1515431771, 1515431772, 1515431773]
+2018-01-08 20:16:13,815 [DEBUG] agent:291 send 1847 bytes of data to collector
+2018-01-08 20:16:13,815 [DEBUG] agent:291 send 1848 bytes of data to collector
+2018-01-08 20:16:14,895 [DEBUG] agent:144 Now in buffer: [1515431772, 1515431773, 1515431774]
+2018-01-08 20:16:15,818 [DEBUG] agent:291 send 1849 bytes of data to collector
+2018-01-08 20:16:16,399 [DEBUG] agent:144 Now in buffer: [1515431776, 1515431773, 1515431774, 1515431775]
+2018-01-08 20:16:16,819 [DEBUG] agent:291 send 1849 bytes of data to collector
+2018-01-08 20:16:16,819 [DEBUG] agent:291 send 1846 bytes of data to collector
+2018-01-08 20:16:17,402 [DEBUG] agent:144 Now in buffer: [1515431776, 1515431777, 1515431775]
+2018-01-08 20:16:17,820 [DEBUG] agent:291 send 1847 bytes of data to collector
+2018-01-08 20:16:19,407 [DEBUG] agent:144 Now in buffer: [1515431776, 1515431777, 1515431778, 1515431779]
+2018-01-08 20:16:19,823 [DEBUG] agent:291 send 1849 bytes of data to collector
+2018-01-08 20:16:19,823 [DEBUG] agent:291 send 1866 bytes of data to collector
+2018-01-08 20:16:21,412 [DEBUG] agent:144 Now in buffer: [1515431778, 1515431779, 1515431780, 1515431781]
+2018-01-08 20:16:21,825 [DEBUG] agent:291 send 1848 bytes of data to collector
+2018-01-08 20:16:21,826 [DEBUG] agent:291 send 1831 bytes of data to collector
+2018-01-08 20:16:22,415 [DEBUG] agent:144 Now in buffer: [1515431780, 1515431781, 1515431782]
+2018-01-08 20:16:22,827 [DEBUG] agent:291 send 1849 bytes of data to collector
+2018-01-08 20:16:23,417 [DEBUG] agent:144 Now in buffer: [1515431781, 1515431782, 1515431783]
+2018-01-08 20:16:23,829 [DEBUG] agent:291 send 1849 bytes of data to collector
+2018-01-08 20:16:24,921 [DEBUG] agent:144 Now in buffer: [1515431782, 1515431783, 1515431784]
+2018-01-08 20:16:25,831 [DEBUG] agent:291 send 1848 bytes of data to collector
+2018-01-08 20:16:26,426 [DEBUG] agent:144 Now in buffer: [1515431783, 1515431784, 1515431785, 1515431786]
+2018-01-08 20:16:26,831 [DEBUG] agent:291 send 1846 bytes of data to collector
+2018-01-08 20:16:26,832 [DEBUG] agent:291 send 1830 bytes of data to collector
+2018-01-08 20:16:27,429 [DEBUG] agent:144 Now in buffer: [1515431785, 1515431786, 1515431787]
+2018-01-08 20:16:27,833 [DEBUG] agent:291 send 1845 bytes of data to collector
+2018-01-08 20:16:28,933 [DEBUG] agent:144 Now in buffer: [1515431786, 1515431787, 1515431788]
+2018-01-08 20:16:29,835 [DEBUG] agent:291 send 1849 bytes of data to collector
+2018-01-08 20:16:29,936 [DEBUG] agent:144 Now in buffer: [1515431787, 1515431788, 1515431789]
+2018-01-08 20:16:30,836 [DEBUG] agent:291 send 1849 bytes of data to collector
+2018-01-08 20:16:31,439 [DEBUG] agent:144 Now in buffer: [1515431788, 1515431789, 1515431790]
+2018-01-08 20:16:31,838 [DEBUG] agent:291 send 1849 bytes of data to collector
+2018-01-08 20:16:32,443 [DEBUG] agent:144 Now in buffer: [1515431789, 1515431790, 1515431791, 1515431792]
+2018-01-08 20:16:32,839 [DEBUG] agent:291 send 1849 bytes of data to collector
+2018-01-08 20:16:32,839 [DEBUG] agent:291 send 1848 bytes of data to collector
+2018-01-08 20:16:33,947 [DEBUG] agent:144 Now in buffer: [1515431791, 1515431792, 1515431793]
+2018-01-08 20:16:34,842 [DEBUG] agent:291 send 1847 bytes of data to collector
+2018-01-08 20:16:34,949 [DEBUG] agent:144 Now in buffer: [1515431792, 1515431793, 1515431794]
+2018-01-08 20:16:35,843 [DEBUG] agent:291 send 1865 bytes of data to collector
+2018-01-08 20:16:36,454 [DEBUG] agent:144 Now in buffer: [1515431793, 1515431794, 1515431795, 1515431796]
+2018-01-08 20:16:36,845 [DEBUG] agent:291 send 1849 bytes of data to collector
+2018-01-08 20:16:36,845 [DEBUG] agent:291 send 1849 bytes of data to collector
+2018-01-08 20:16:38,458 [DEBUG] agent:144 Now in buffer: [1515431795, 1515431796, 1515431797, 1515431798]
+2018-01-08 20:16:38,846 [DEBUG] agent:291 send 1850 bytes of data to collector
+2018-01-08 20:16:38,846 [DEBUG] agent:291 send 1848 bytes of data to collector
+2018-01-08 20:16:39,962 [DEBUG] agent:144 Now in buffer: [1515431797, 1515431798, 1515431799]
+2018-01-08 20:16:40,849 [DEBUG] agent:291 send 1848 bytes of data to collector
+2018-01-08 20:16:40,965 [DEBUG] agent:144 Now in buffer: [1515431798, 1515431799, 1515431800]
+2018-01-08 20:16:41,850 [DEBUG] agent:291 send 1849 bytes of data to collector
+2018-01-08 20:16:43,165 [DEBUG] agent:144 Now in buffer: [1515431799, 1515431800, 1515431801]
+2018-01-08 20:16:43,668 [DEBUG] agent:144 Now in buffer: [1515431800, 1515431801, 1515431802, 1515431803]
+2018-01-08 20:16:43,852 [DEBUG] agent:291 send 1849 bytes of data to collector
+2018-01-08 20:16:43,853 [DEBUG] agent:291 send 1849 bytes of data to collector
+2018-01-08 20:16:43,853 [DEBUG] agent:291 send 1848 bytes of data to collector
+2018-01-08 20:16:44,671 [DEBUG] agent:144 Now in buffer: [1515431802, 1515431803, 1515431804]
+2018-01-08 20:16:44,854 [DEBUG] agent:291 send 1865 bytes of data to collector
+2018-01-08 20:16:46,175 [DEBUG] agent:144 Now in buffer: [1515431803, 1515431804, 1515431805, 1515431806]
+2018-01-08 20:16:46,856 [DEBUG] agent:291 send 1831 bytes of data to collector
+2018-01-08 20:16:46,857 [DEBUG] agent:291 send 657 bytes of data to collector
+2018-01-08 20:16:48,684 [DEBUG] agent:144 Now in buffer: [1515431808, 1515431805, 1515431806, 1515431807]
+2018-01-08 20:16:48,859 [DEBUG] agent:291 send 1845 bytes of data to collector
+2018-01-08 20:16:48,859 [DEBUG] agent:291 send 1848 bytes of data to collector
+2018-01-08 20:16:50,690 [DEBUG] agent:144 Now in buffer: [1515431808, 1515431809, 1515431810, 1515431807]
+2018-01-08 20:16:50,862 [DEBUG] agent:291 send 1849 bytes of data to collector
+2018-01-08 20:16:50,862 [DEBUG] agent:291 send 1848 bytes of data to collector
+2018-01-08 20:16:52,196 [DEBUG] agent:144 Now in buffer: [1515431809, 1515431810, 1515431811, 1515431812]
+2018-01-08 20:16:52,865 [DEBUG] agent:291 send 1850 bytes of data to collector
+2018-01-08 20:16:52,865 [DEBUG] agent:291 send 1848 bytes of data to collector
+2018-01-08 20:16:54,200 [DEBUG] agent:144 Now in buffer: [1515431811, 1515431812, 1515431813]
+2018-01-08 20:16:54,867 [DEBUG] agent:291 send 1852 bytes of data to collector
+2018-01-08 20:16:55,703 [DEBUG] agent:144 Now in buffer: [1515431812, 1515431813, 1515431814, 1515431815]
+2018-01-08 20:16:55,868 [DEBUG] agent:291 send 1848 bytes of data to collector
+2018-01-08 20:16:55,869 [DEBUG] agent:291 send 1851 bytes of data to collector
+2018-01-08 20:16:57,871 [INFO] telegraf:311 STDERR: 2018-01-08T17:16:57Z W! Skipping a scheduled flush because there is already a flush ongoing.
+2018-01-08 20:16:58,332 [DEBUG] agent:144 Now in buffer: [1515431814, 1515431815, 1515431816, 1515431817]
+2018-01-08 20:16:58,872 [DEBUG] agent:291 send 1765 bytes of data to collector
+2018-01-08 20:16:58,873 [DEBUG] agent:291 send 1848 bytes of data to collector
+2018-01-08 20:16:59,335 [DEBUG] agent:144 Now in buffer: [1515431816, 1515431817, 1515431818, 1515431819]
+2018-01-08 20:16:59,874 [DEBUG] agent:291 send 1849 bytes of data to collector
+2018-01-08 20:16:59,874 [DEBUG] agent:291 send 1851 bytes of data to collector
+2018-01-08 20:17:00,838 [DEBUG] agent:144 Now in buffer: [1515431818, 1515431819, 1515431820]
+2018-01-08 20:17:00,876 [DEBUG] agent:291 send 1869 bytes of data to collector
+2018-01-08 20:17:01,841 [DEBUG] agent:144 Now in buffer: [1515431819, 1515431820, 1515431821]
+2018-01-08 20:17:01,877 [DEBUG] agent:291 send 1848 bytes of data to collector
+2018-01-08 20:17:02,844 [DEBUG] agent:144 Now in buffer: [1515431820, 1515431821, 1515431822]
+2018-01-08 20:17:02,879 [DEBUG] agent:291 send 1851 bytes of data to collector
+2018-01-08 20:17:04,882 [INFO] telegraf:311 STDERR: 2018-01-08T17:17:04Z W! Skipping a scheduled flush because there is already a flush ongoing.
+2018-01-08 20:17:05,639 [DEBUG] agent:144 Now in buffer: [1515431821, 1515431822, 1515431823]
+2018-01-08 20:17:06,139 [DEBUG] agent:291 send 1849 bytes of data to collector
+2018-01-08 20:17:06,142 [DEBUG] agent:144 Now in buffer: [1515431822, 1515431823, 1515431824, 1515431825]
+2018-01-08 20:17:07,141 [DEBUG] agent:291 send 1868 bytes of data to collector
+2018-01-08 20:17:07,141 [DEBUG] agent:291 send 1851 bytes of data to collector
+2018-01-08 20:17:07,149 [DEBUG] agent:144 Now in buffer: [1515431824, 1515431825, 1515431826]
+2018-01-08 20:17:08,143 [DEBUG] agent:291 send 1835 bytes of data to collector
+2018-01-08 20:17:08,152 [DEBUG] agent:144 Now in buffer: [1515431825, 1515431826, 1515431827, 1515431828]
+2018-01-08 20:17:09,144 [DEBUG] agent:291 send 1853 bytes of data to collector
+2018-01-08 20:17:09,145 [DEBUG] agent:291 send 1852 bytes of data to collector
+2018-01-08 20:17:10,157 [DEBUG] agent:144 Now in buffer: [1515431827, 1515431828, 1515431829, 1515431830]
+2018-01-08 20:17:11,147 [DEBUG] agent:291 send 1854 bytes of data to collector
+2018-01-08 20:17:11,147 [DEBUG] agent:291 send 1837 bytes of data to collector
+2018-01-08 20:17:11,661 [DEBUG] agent:144 Now in buffer: [1515431829, 1515431830, 1515431831]
+2018-01-08 20:17:12,148 [DEBUG] agent:291 send 1853 bytes of data to collector
+2018-01-08 20:17:13,667 [DEBUG] agent:144 Now in buffer: [1515431830, 1515431831, 1515431832, 1515431833]
+2018-01-08 20:17:14,151 [DEBUG] agent:291 send 1854 bytes of data to collector
+2018-01-08 20:17:14,151 [DEBUG] agent:291 send 1854 bytes of data to collector
+2018-01-08 20:17:15,170 [DEBUG] agent:144 Now in buffer: [1515431832, 1515431833, 1515431834]
+2018-01-08 20:17:16,154 [DEBUG] agent:291 send 1853 bytes of data to collector
+2018-01-08 20:17:16,174 [DEBUG] agent:144 Now in buffer: [1515431833, 1515431834, 1515431835, 1515431836]
+2018-01-08 20:17:17,155 [DEBUG] agent:291 send 1855 bytes of data to collector
+2018-01-08 20:17:17,343 [DEBUG] agent:291 send 1853 bytes of data to collector
+2018-01-08 20:17:17,344 [INFO] telegraf:311 STDERR: 2018-01-08T17:17:17Z W! Skipping a scheduled flush because there is already a flush ongoing.
+2018-01-08 20:17:17,846 [DEBUG] agent:144 Now in buffer: [1515431835, 1515431836, 1515431837]
+2018-01-08 20:17:18,345 [DEBUG] agent:291 send 1836 bytes of data to collector
+2018-01-08 20:17:18,849 [DEBUG] agent:144 Now in buffer: [1515431836, 1515431837, 1515431838]
+2018-01-08 20:17:19,346 [DEBUG] agent:291 send 1852 bytes of data to collector
+2018-01-08 20:17:19,851 [DEBUG] agent:144 Now in buffer: [1515431837, 1515431838, 1515431839]
+2018-01-08 20:17:20,348 [DEBUG] agent:291 send 1853 bytes of data to collector
+2018-01-08 20:17:20,855 [DEBUG] agent:144 Now in buffer: [1515431840, 1515431838, 1515431839]
+2018-01-08 20:17:21,349 [DEBUG] agent:291 send 1852 bytes of data to collector
+2018-01-08 20:17:21,357 [DEBUG] agent:144 Now in buffer: [1515431840, 1515431841, 1515431839]
+2018-01-08 20:17:22,350 [DEBUG] agent:291 send 1852 bytes of data to collector
+2018-01-08 20:17:23,362 [DEBUG] agent:144 Now in buffer: [1515431840, 1515431841, 1515431842, 1515431843]
+2018-01-08 20:17:24,353 [DEBUG] agent:291 send 1854 bytes of data to collector
+2018-01-08 20:17:24,353 [DEBUG] agent:291 send 1835 bytes of data to collector
+2018-01-08 20:17:24,365 [DEBUG] agent:144 Now in buffer: [1515431842, 1515431843, 1515431844]
+2018-01-08 20:17:25,355 [DEBUG] agent:291 send 1851 bytes of data to collector
+2018-01-08 20:17:25,869 [DEBUG] agent:144 Now in buffer: [1515431843, 1515431844, 1515431845]
+2018-01-08 20:17:26,356 [DEBUG] agent:291 send 1849 bytes of data to collector
+2018-01-08 20:17:27,373 [DEBUG] agent:144 Now in buffer: [1515431844, 1515431845, 1515431846]
+2018-01-08 20:17:27,874 [DEBUG] agent:144 Now in buffer: [1515431845, 1515431846, 1515431847]
+2018-01-08 20:17:28,359 [DEBUG] agent:291 send 1852 bytes of data to collector
+2018-01-08 20:17:28,359 [DEBUG] agent:291 send 1850 bytes of data to collector
+2018-01-08 20:17:29,380 [DEBUG] agent:144 Now in buffer: [1515431846, 1515431847, 1515431848, 1515431849]
+2018-01-08 20:17:30,361 [DEBUG] agent:291 send 1852 bytes of data to collector
+2018-01-08 20:17:30,362 [DEBUG] agent:291 send 1872 bytes of data to collector
+2018-01-08 20:17:30,362 [INFO] telegraf:311 STDERR: 2018-01-08T17:17:30Z W! Skipping a scheduled flush because there is already a flush ongoing.
+2018-01-08 20:17:30,382 [DEBUG] agent:144 Now in buffer: [1515431848, 1515431849, 1515431850]
+2018-01-08 20:17:31,363 [DEBUG] agent:291 send 1837 bytes of data to collector
+2018-01-08 20:17:32,389 [DEBUG] agent:144 Now in buffer: [1515431849, 1515431850, 1515431851, 1515431852]
+2018-01-08 20:17:33,366 [DEBUG] agent:291 send 1851 bytes of data to collector
+2018-01-08 20:17:33,366 [DEBUG] agent:291 send 1851 bytes of data to collector
+2018-01-08 20:17:33,392 [DEBUG] agent:144 Now in buffer: [1515431851, 1515431852, 1515431853]
+2018-01-08 20:17:34,255 [WARNING] agent:22 Got signal 15, going to stop
+2018-01-08 20:17:34,256 [DEBUG] agent:440 Interrupted
+2018-01-08 20:17:34,256 [DEBUG] agent:449 Join the worker thread, waiting for cleanup
+2018-01-08 20:17:34,367 [INFO] agent:345 Terminating startup commands
+2018-01-08 20:17:34,367 [INFO] agent:349 Terminating collector process: <subprocess.Popen object at 0x7efbf6712790>
+2018-01-08 20:17:34,368 [DEBUG] agent:329 Terminating: 14682
+2018-01-08 20:17:34,371 [INFO] agent:333 Retcode for PID 14682 -15
+2018-01-08 20:17:34,371 [INFO] agent:352 Running shutdown commands
+2018-01-08 20:17:34,372 [INFO] agent:358 Worker thread finished
+2018-01-08 20:17:34,420 [WARNING] agent:27 Got signal 17, ignoring

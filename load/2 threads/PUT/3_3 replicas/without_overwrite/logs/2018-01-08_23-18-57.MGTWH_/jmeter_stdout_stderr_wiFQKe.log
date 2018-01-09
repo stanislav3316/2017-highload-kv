@@ -1,0 +1,11 @@
+Creating summariser <summary>
+Created the tree successfully using /home/iters/high-dynamic/2 threads/PUT/3_3 replicas/without_overwrite/modified_umYFtc.jmx
+Starting the test @ Mon Jan 08 23:19:14 MSK 2018 (1515442754496)
+Waiting for possible shutdown message on port 4445
+summary +   3853 in  14,3s =  268,7/s Avg:     5 Min:     1 Max:   250 Err:     0 (0,00%) Active: 2 Started: 2 Finished: 0
+summary +  27570 in    30s =  919,0/s Avg:     1 Min:     0 Max:    29 Err:     0 (0,00%) Active: 2 Started: 2 Finished: 0
+summary =  31423 in  44,3s =  708,7/s Avg:     1 Min:     0 Max:   250 Err:     0 (0,00%)
+summary +  31167 in    30s = 1038,6/s Avg:     1 Min:     0 Max:    38 Err:     0 (0,00%) Active: 2 Started: 2 Finished: 0
+summary =  62590 in  74,3s =  841,9/s Avg:     1 Min:     0 Max:   250 Err:     0 (0,00%)
+summary +  30093 in    30s = 1003,0/s Avg:     1 Min:     0 Max:    30 Err:     0 (0,00%) Active: 2 Started: 2 Finished: 0
+summary =  92683 in   104s =  888,3/s Avg:     1 Min:     0 Max:   250 Err:     0 (0,00%)

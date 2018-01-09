@@ -1,0 +1,81 @@
+android: {enabled: false, package: yandextank.plugins.Android}
+autostop:
+  autostop: []
+  enabled: true
+  package: yandextank.plugins.Autostop
+  report_file: autostop_report.txt
+bfg: {enabled: false, package: yandextank.plugins.Bfg}
+console: {disable_all_colors: false, disable_colors: '', enabled: true, info_panel_width: 33,
+  package: yandextank.plugins.Console, short_only: false}
+core: {affinity: '', artifacts_base_dir: ./logs, artifacts_dir: null, cmdline: /usr/local/bin/yandex-tank
+    -c load.ini, lock_dir: /var/lock/, message: '', pid: 9449, taskset_path: taskset,
+  uuid: 2b9910cc-4493-44f7-a69c-50e643f1857d}
+influx: {enabled: false, package: yandextank.plugins.Influx}
+jmeter:
+  args: ''
+  buffer_size: null
+  buffered_seconds: 3
+  enabled: true
+  exclude_markers: []
+  ext_log: none
+  extended_log: none
+  jmeter_path: jmeter
+  jmeter_ver: 2.11
+  jmx: /home/iters/high-dynamic/2 threads/PUT/2_3 replicas/without_overwrite/plan.jmx
+  package: yandextank.plugins.JMeter
+  shutdown_timeout: 10
+  variables: {}
+json_report: {enabled: true, monitoring_log: monitoring.log, package: yandextank.plugins.JsonReport,
+  test_data_log: test_data.log}
+overload:
+  api_address: https://overload.yandex.net/
+  api_attempts: 60
+  api_timeout: 10
+  chunk_size: 500000
+  component: ''
+  connection_timeout: 30
+  enabled: true
+  ignore_target_lock: false
+  job_dsc: ''
+  job_name: none
+  jobno_file: jobno_file.txt
+  lock_targets: auto
+  log_data_requests: false
+  log_monitoring_requests: false
+  log_other_requests: false
+  log_status_requests: false
+  maintenance_attempts: 10
+  maintenance_timeout: 60
+  meta: {ammo_path: /home/iters/high-dynamic/2 threads/PUT/2_3 replicas/without_overwrite,
+    cmdline: /usr/local/bin/yandex-tank -c load.ini, jobno: 73486, loop_count: 0,
+    target_host: '', target_port: 80}
+  network_attempts: 60
+  network_timeout: 10
+  notify: ''
+  operator: null
+  package: yandextank.plugins.DataUploader
+  regress: false
+  send_status_period: 10
+  strict_lock: false
+  target_lock_duration: 30m
+  task: ''
+  threads_timeout: 60
+  token_file: token.txt
+  upload_token: null
+  ver: ''
+  writer_endpoint: ''
+phantom: {enabled: false, package: yandextank.plugins.Phantom}
+rcassert: {enabled: true, fail_code: 10, package: yandextank.plugins.RCAssert, pass: ''}
+rcheck: {disk_limit: 2048, enabled: true, interval: 10s, mem_limit: 512, package: yandextank.plugins.ResourceCheck}
+shellexec: {catch_out: false, enabled: true, end: '', package: yandextank.plugins.ShellExec,
+  poll: '', post_process: '', prepare: '', start: ''}
+telegraf:
+  config: auto
+  default_target: localhost
+  disguise_hostnames: true
+  enabled: true
+  kill_old: false
+  meta: {config_contents: "<Monitoring>\n\t<Host address=\"[target]\" />\n</Monitoring>"}
+  package: yandextank.plugins.Telegraf
+  ssh_timeout: 5s
+tips: {disable: false, enabled: true, package: yandextank.plugins.TipsAndTricks}

@@ -1,0 +1,13 @@
+Creating summariser <summary>
+Created the tree successfully using /home/iters/high-dynamic/4 threads/GET/2_3 replicas/without_repeats/modified_HVKftb.jmx
+Starting the test @ Mon Jan 08 23:25:25 MSK 2018 (1515443125769)
+Waiting for possible shutdown message on port 4445
+summary +    582 in   3,1s =  186,7/s Avg:    12 Min:     2 Max:   257 Err:   582 (100,00%) Active: 4 Started: 4 Finished: 0
+summary +  22230 in    30s =  740,7/s Avg:     3 Min:     0 Max:    55 Err: 22230 (100,00%) Active: 4 Started: 4 Finished: 0
+summary =  22812 in  33,1s =  688,8/s Avg:     3 Min:     0 Max:   257 Err: 22812 (100,00%)
+summary +  48713 in    30s = 1623,6/s Avg:     1 Min:     0 Max:    58 Err: 48713 (100,00%) Active: 4 Started: 4 Finished: 0
+summary =  71525 in  63,1s = 1133,1/s Avg:     2 Min:     0 Max:   257 Err: 71525 (100,00%)
+summary +  44802 in    30s = 1493,4/s Avg:     1 Min:     0 Max:    42 Err: 44802 (100,00%) Active: 4 Started: 4 Finished: 0
+summary = 116327 in  93,1s = 1249,2/s Avg:     2 Min:     0 Max:   257 Err: 116327 (100,00%)
+summary +  50551 in    30s = 1685,0/s Avg:     1 Min:     0 Max:    36 Err: 50551 (100,00%) Active: 4 Started: 4 Finished: 0
+summary = 166878 in   123s = 1355,4/s Avg:     1 Min:     0 Max:   257 Err: 166878 (100,00%)

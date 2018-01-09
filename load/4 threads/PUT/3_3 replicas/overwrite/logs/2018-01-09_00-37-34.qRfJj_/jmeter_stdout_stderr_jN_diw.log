@@ -1,0 +1,11 @@
+Creating summariser <summary>
+Created the tree successfully using /home/iters/high-dynamic/4 threads/PUT/3_3 replicas/overwrite/modified_zrYwjk.jmx
+Starting the test @ Tue Jan 09 00:37:51 MSK 2018 (1515447471374)
+Waiting for possible shutdown message on port 4445
+summary +   2290 in     8s =  304,4/s Avg:     8 Min:     1 Max:   272 Err:     2 (0,09%) Active: 4 Started: 4 Finished: 0
+summary +  28707 in    30s =  956,6/s Avg:     2 Min:     0 Max:    48 Err:     0 (0,00%) Active: 4 Started: 4 Finished: 0
+summary =  30997 in    38s =  826,0/s Avg:     3 Min:     0 Max:   272 Err:     2 (0,01%)
+summary +  43457 in    30s = 1447,6/s Avg:     1 Min:     0 Max:    37 Err:     0 (0,00%) Active: 4 Started: 4 Finished: 0
+summary =  74454 in    68s = 1102,3/s Avg:     2 Min:     0 Max:   272 Err:     2 (0,00%)
+summary +  42578 in    30s = 1418,3/s Avg:     1 Min:     0 Max:    97 Err:     0 (0,00%) Active: 4 Started: 4 Finished: 0
+summary = 117032 in    98s = 1200,0/s Avg:     2 Min:     0 Max:   272 Err:     2 (0,00%)

@@ -1,0 +1,11 @@
+Creating summariser <summary>
+Created the tree successfully using /home/iters/high-dynamic/2 threads/PUT/2_3 replicas/without_overwrite/modified_IpC507.jmx
+Starting the test @ Mon Jan 08 23:06:57 MSK 2018 (1515442017090)
+Waiting for possible shutdown message on port 4445
+summary +    137 in     2s =   76,5/s Avg:    17 Min:     4 Max:   339 Err:     0 (0,00%) Active: 2 Started: 2 Finished: 0
+summary +  12046 in    30s =  401,4/s Avg:     3 Min:     0 Max:    57 Err:     0 (0,00%) Active: 2 Started: 2 Finished: 0
+summary =  12183 in    32s =  383,4/s Avg:     3 Min:     0 Max:   339 Err:     0 (0,00%)
+summary +  29336 in    30s =  977,8/s Avg:     1 Min:     0 Max:    19 Err:     0 (0,00%) Active: 2 Started: 2 Finished: 0
+summary =  41519 in    62s =  672,0/s Avg:     1 Min:     0 Max:   339 Err:     0 (0,00%)
+summary +  29486 in    30s =  982,8/s Avg:     1 Min:     0 Max:    25 Err:     0 (0,00%) Active: 2 Started: 2 Finished: 0
+summary =  71005 in    92s =  773,6/s Avg:     1 Min:     0 Max:   339 Err:     0 (0,00%)
