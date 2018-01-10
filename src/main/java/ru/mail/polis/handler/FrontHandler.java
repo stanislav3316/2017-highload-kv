@@ -7,7 +7,7 @@ import ru.mail.polis.message.RequestParameters;
 import ru.mail.polis.message.ResponseMessage;
 import ru.mail.polis.storageManager.BasicStorage;
 import ru.mail.polis.util.ServerSelectorUtils;
-
+import ru.mail.polis.util.StringHashingUtils;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,9 +34,10 @@ public class FrontHandler {
         this.topology = new ArrayList<>(topology);
         this.port = port;
         this.storage = storage;
-        client = new OneNioHttpClient(this.topology);
+        client = new OneNioHttpClient();
         ecs = new ExecutorCompletionService<>(
-                Executors.newCachedThreadPool()
+                Executors.newFixedThreadPool(
+                        Runtime.getRuntime().availableProcessors())
         );
     }
 
@@ -109,6 +110,7 @@ public class FrontHandler {
             try {
                 resp = (Response) client.sendGet(server, id);
             } catch (Exception e) {
+                e.printStackTrace();
                 continue;
             }
 
@@ -138,42 +140,86 @@ public class FrontHandler {
             session.sendResponse(new Response(Response.NOT_FOUND, "file not found".getBytes()));
         }
     }
-
     private void putController(Request request,
                                HttpSession session,
                                String id,
                                int ack,
-                               int from) throws IOException {
+                               int from) throws IOException, InterruptedException, ExecutionException {
         int received = 0;
+        int activeTasks = 0;
+
+        String TTL = request.getParameter("ttl");
+        final boolean isTTL = !(TTL == null || TTL.length() == 0);
+
+        final String requestTTL;
+        if (isTTL) {
+            requestTTL = TTL.substring(1, TTL.length());
+        } else {
+            requestTTL = "";
+        }
 
         for (String server : ServerSelectorUtils.getServers(topology, id, from)) {
             if (server.contains(port + "")) {
-                byte[] body = request.getBody();
-                storage.saveData(id, body);
-                received++;
+                ecs.submit(() -> {
+                    if (isTTL) {
+                        storage.saveDataWithTTL(
+                                id,
+                                request.getBody(),
+                                Long.parseLong(requestTTL));
+                    } else {
+                        storage.saveData(id, request.getBody());
+                    }
+                    return new ResponseMessage(CREATED_CODE);
+                });
+
+                activeTasks++;
                 continue;
             }
 
-            Response resp = null;
+            ecs.submit(() -> {
+                try {
+                    Response resp = null;
 
-            try {
-                resp = (Response) client.sendPut(server, id, request.getBody());
-            } catch (Exception e) {
+                    if (isTTL) {
+                        resp = (Response) client.sendPutTTL(
+                                server,
+                                id,
+                                request.getBody(),
+                                Long.parseLong(requestTTL));
+                    } else {
+                        resp = (Response) client.sendPut(server, id, request.getBody());
+                    }
+
+                    return new ResponseMessage(resp.getStatus());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return null;
+                }
+            });
+
+            activeTasks++;
+        }
+
+        for (int i = 0; i < activeTasks; i++) {
+            ResponseMessage rm =  ecs.take().get();
+
+            if (rm == null) {
                 continue;
             }
 
-            if (resp.getStatus() == CREATED_CODE) {
+            if (rm.code == CREATED_CODE) {
                 received++;
             }
         }
 
         if (received >= ack) {
-            session.sendResponse(new Response(Response.CREATED, "file was created".getBytes()));
+            session.sendResponse(new Response(
+                    Response.CREATED, "file was created".getBytes()));
         } else {
-            session.sendResponse(new Response(Response.GATEWAY_TIMEOUT, "not enought replicas".getBytes()));
+            session.sendResponse(new Response(
+                    Response.GATEWAY_TIMEOUT, "not enought replicas".getBytes()));
         }
     }
-
 
     private void deleteController(HttpSession session,
                                   String id,

@@ -11,5 +11,6 @@ import java.io.IOException;
 public interface BasicHttpClient<G, P, D> {
     G sendGet(String server, String id) throws IOException, InterruptedException, HttpException, PoolException;
     P sendPut(String server, String id, byte[] body) throws IOException, InterruptedException, HttpException, PoolException;
+    P sendPutTTL(String server, String id, byte[] body, long ttl) throws IOException, InterruptedException, HttpException, PoolException;
     D sendDelete(String server, String id) throws IOException, InterruptedException, HttpException, PoolException;
 }

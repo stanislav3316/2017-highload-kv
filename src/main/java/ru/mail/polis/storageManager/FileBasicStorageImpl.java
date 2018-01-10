@@ -24,7 +24,8 @@ public class FileBasicStorageImpl implements BasicStorage {
     private CacheLRU cache;
 
     static {
-        exec = Executors.newCachedThreadPool();
+        exec = Executors.newFixedThreadPool(
+                Runtime.getRuntime().availableProcessors());
     }
 
     public FileBasicStorageImpl(File workingDir) {
@@ -89,6 +90,11 @@ public class FileBasicStorageImpl implements BasicStorage {
     @Override
     public boolean isDeleted(String key) {
         return deletedKeys.contains(key);
+    }
+
+    @Override
+    public void saveDataWithTTL(String id, byte[] data, long ttl) throws IOException {
+        throw new UnsupportedOperationException("Use FileStorageTTL impl for this");
     }
 
 

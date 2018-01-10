@@ -8,7 +8,8 @@ import java.io.IOException;
 public interface BasicStorage {
     void saveData(String id, byte[] data) throws IOException;
     boolean removeData(String id);
-    byte[] getData(String key);
+    byte[] getData(String key) throws IOException;
     boolean isDataExist(String key);
     boolean isDeleted(String key);
+    void saveDataWithTTL(String id, byte[] data, long ttl) throws IOException;
 }

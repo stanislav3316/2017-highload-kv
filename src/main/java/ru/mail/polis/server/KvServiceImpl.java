@@ -7,6 +7,8 @@ import ru.mail.polis.handler.FrontHandler;
 import ru.mail.polis.handler.BackHandler;
 import ru.mail.polis.storageManager.BasicStorage;
 import ru.mail.polis.storageManager.FileBasicStorageImpl;
+import ru.mail.polis.storageManager.FileStorageTTL;
+import ru.mail.polis.ttl_manager.ManagerTTL;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,7 +25,7 @@ public class KvServiceImpl
                          File dir,
                          Set<String> topology) throws IOException {
         super(config);
-        BasicStorage storage = new FileBasicStorageImpl(dir);
+        BasicStorage storage = new FileStorageTTL(dir);
         addRequestHandlers(new BackHandler(storage));
         addRequestHandlers(new FrontHandler(topology, this.port, storage));
     }

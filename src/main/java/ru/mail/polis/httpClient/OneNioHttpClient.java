@@ -20,33 +20,27 @@ public class OneNioHttpClient implements BasicHttpClient<Response, Response, Res
     private static final String PUT_PATH = "/v0/put?id=";
     private static final String DELETE_PATH = "/v0/delete?id=";
 
-    private final Map<String, HttpClient> map;
-
-    public OneNioHttpClient(List<String> topology) {
-        map = new HashMap<>();
-
-        for (String server : topology) {
-            map.put(server, new HttpClient(
-                    new ConnectionString(server)
-            ));
-        }
-    }
-
     @Override
     public Response sendGet(String server, String id) throws IOException, InterruptedException, HttpException, PoolException {
-        HttpClient client = map.get(server);
+        HttpClient client = new HttpClient(new ConnectionString(server));
         return client.get(GET_PATH + id);
     }
 
     @Override
     public Response sendPut(String server, String id, byte[] body) throws IOException, InterruptedException, HttpException, PoolException {
-        HttpClient client = map.get(server);
+        HttpClient client = new HttpClient(new ConnectionString(server));
         return client.put(PUT_PATH + id, body);
     }
 
     @Override
+    public Response sendPutTTL(String server, String id, byte[] body, long ttl) throws IOException, InterruptedException, HttpException, PoolException {
+        HttpClient client = new HttpClient(new ConnectionString(server));
+        return client.put(PUT_PATH + id + "&ttl=" + ttl, body);
+    }
+
+    @Override
     public Response sendDelete(String server, String id) throws IOException, InterruptedException, HttpException, PoolException {
-        HttpClient client = map.get(server);
+        HttpClient client = new HttpClient(new ConnectionString(server));
         return client.delete(DELETE_PATH + id);
     }
 }

@@ -36,8 +36,22 @@ public class BackHandler {
     @Path("/v0/put")
     public void putController(Request request, HttpSession session, @Param(value = "id") String id)
             throws IOException {
+        String TTL = request.getParameter("ttl");
+        final boolean isTTL = !(TTL == null || TTL.length() == 0);
+
+        final String requestTTL;
+        if (isTTL) {
+            requestTTL = TTL.substring(1, TTL.length());
+        } else {
+            requestTTL = "";
+        }
+
         byte[] body = request.getBody();
-        storage.saveData(id, body);
+        if (isTTL) {
+            storage.saveDataWithTTL(id, body, Long.parseLong(requestTTL));
+        } else {
+            storage.saveData(id, body);
+        }
 
         session.sendResponse(new Response(
                 Response.CREATED, "file was attempted to created".getBytes()));

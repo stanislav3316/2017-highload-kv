@@ -1,5 +1,7 @@
 package ru.mail.polis.httpClient;
 
+import one.nio.http.HttpException;
+import one.nio.pool.PoolException;
 import org.apache.http.HttpResponse;
 import org.jetbrains.annotations.NotNull;
 import org.apache.http.client.fluent.Request;
@@ -31,6 +33,11 @@ public class HttpComponentsClient
                                 @NotNull String id,
                                 @NotNull byte[] body) throws IOException {
         return Request.Put(url(id, server)).bodyByteArray(body).execute().returnResponse();
+    }
+
+    @Override
+    public HttpResponse sendPutTTL(String server, String id, byte[] body, long ttl) throws IOException, InterruptedException, HttpException, PoolException {
+        return null;
     }
 
     @Override
